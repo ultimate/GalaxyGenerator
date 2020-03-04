@@ -266,16 +266,17 @@ public class GalaxySpecification
 		}
 	}
 	
-	// @formatter:off
 	/**
 	 * Elliptic galaxy as defined by https://en.wikipedia.org/wiki/Galaxy_morphological_classification
 	 * Note: represents E0-E7 depending on the dimensions  
 	 */
 	public static class Ex extends GalaxySpecification
 	{
+		// @formatter:off
+		public Ex(int xSize, int ySize, int zSize)					{	super(xSize, ySize, zSize);				}
 		public Ex(int xSize, int ySize, int zSize, long seed)		{	super(xSize, ySize, zSize, seed);		}
 		public Ex(int xSize, int ySize, int zSize, Random random)	{	super(xSize, ySize, zSize, random);		}
-		public Ex(int xSize, int ySize, int zSize)					{	super(xSize, ySize, zSize);				}
+		// @formatter:on
 		
 		// initializer
 		{
@@ -288,9 +289,11 @@ public class GalaxySpecification
 	 */
 	public static class S0 extends GalaxySpecification
 	{
+		// @formatter:off
+		public S0(int xSize, int ySize, int zSize)					{	super(xSize, ySize, zSize);				}
 		public S0(int xSize, int ySize, int zSize, long seed)		{	super(xSize, ySize, zSize, seed);		}
 		public S0(int xSize, int ySize, int zSize, Random random)	{	super(xSize, ySize, zSize, random);		}
-		public S0(int xSize, int ySize, int zSize)					{	super(xSize, ySize, zSize);				}
+		// @formatter:on
 		
 		// initializer
 		{
@@ -300,5 +303,4 @@ public class GalaxySpecification
 			this.addElement(EnumGalaxyElement.D, 0.75, PARAMS_D);
 		}
 	}
-	// @formatter:on
 }
