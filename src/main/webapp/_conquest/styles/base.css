@@ -1,0 +1,878 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+#debug {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 200px;
+	height: 150px;
+	border: 1px solid #AAAAAA;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+* {
+	opacity: 1;
+	transition: all 0.5s;
+}
+
+.hidden {
+	display: none;
+}
+
+.invisible {
+	opacity: 0;
+}
+
+body {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 1.5px;
+	padding: 0px;
+}
+
+body, select {
+	background: rgb(0, 0, 0);
+	color: rgba(255, 255, 255, 0.9);
+	margin: 0px;
+	font-family: monospace;
+	font-size: 11px;
+	overflow: hidden;
+}
+
+.centered {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	transition: all 3s;
+}
+
+.centered_x {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	transition: all 3s;
+}
+
+.centered_y {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.attop {
+	position: absolute;
+	top: 0px;
+	bottom: auto;
+	margin-top: 0px;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.atbottom {
+	position: absolute;
+	top: auto;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: 0px;
+	transition: all 3s;
+}
+
+#overlay {
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+}
+
+#view {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+#stats {			
+	position: absolute;
+	bottom: 2px;
+	left: 0px;
+}	
+
+#menu {
+	position: absolute;
+	right: 1px;
+	top: 1px;
+}
+
+#menu, 
+#menu>div {
+	width: 300px;
+}
+
+#menu>div {
+	margin-top: 1px;
+}
+
+#menu #menu_fixed {
+	position: absolute;
+	right: 7px;
+	left: auto;
+	top: 7px;
+	width: 36px;
+	/*height: 36px;*/
+	bottom: 7px;
+}
+
+#menu #menu_fixed #door {
+	width: 36px;
+	height: 36px;
+}
+
+/*
+#menu #menu_fixed #door:hover {
+	background: rgba(0, 141, 141, 0.9);
+}
+*/
+
+#locale_chooser {
+	margin-top: 2px;	
+}
+
+#locale_chooser,
+#locale_chooser>* {
+	width: 36px;
+}
+
+.flag,
+#locale_chooser .flag {
+	width: 16px;
+	height: 11px;
+	top: 1.5px;
+}
+
+/* choose here whether to display .flag, label or .rawValue */
+#locale_chooser .flag,
+#locale_chooser label {
+	display: none;
+}
+#locale_chooser .rawValue {
+	display: inline;
+	margin-top: 0.5px;
+}
+
+#menu #userbar {
+	height: 68px;
+	/*top: 0px;*/
+}
+
+#menu #userbar>div {
+	padding: 0px;
+}
+
+#user_login,
+#user_login>div>div {
+	overflow: hidden;
+}
+
+form {
+	line-height: 20px;
+}
+
+form.leftaligned>label,
+#user_login>a {
+	width: 100px;
+	display: block;
+	float: left;	
+}
+
+form.leftaligned>label.medium {
+	width: 140px;
+}
+
+form.leftaligned>label.large {
+	width: 150px;
+}
+
+form > label.unit {
+	margin-left: 10px;
+	width: auto;
+}
+
+form.rightaligned > label.unit {
+	float: right;
+}
+
+form.leftaligned>input,
+form.leftaligned>.select,
+form.leftaligned>.select>*,
+#user_login>a+a {
+	float: left;
+}
+
+form.rightaligned>input, 
+form.rightaligned>.select,
+form.rightaligned>.select>*{
+	float:right;
+}
+
+form>input,
+#user_login>a+a {
+	width: 130px;
+}
+
+form>input.half {
+	width: 73px;
+}
+
+form>input.medium {
+	width: 150px;
+}
+
+form>input.long{
+	width: 200px;
+}
+
+form>input.verylong {
+	width: 250px;
+}
+
+/* selects require some extra attention */
+
+form>.select,
+form>.select>* {
+	width: 132px;
+}
+
+form>.select.half,
+form>.select.half>* {
+	width: 75px;
+}
+
+form>.select.medium,
+form>.select.medium>* {
+	width: 152px;
+}
+
+form>.select.long,
+form>.select.long>* {
+	width: 202px;
+}
+
+form>.select.verylong,
+form>.select.verylong>* {
+	width: 252px;
+}
+
+#menu #nav {
+	height: 50px;
+	top: 54px;
+	line-height: 4.2em;
+}
+
+#menu #menu_content {
+	overflow: hidden;
+	height: 300px;
+	/*top: 107px;*/	
+}
+
+#menu #menu_content>div,
+#menu #menu_content>div>div {
+	overflow: hidden;
+}
+
+#menu #menu_content form {
+	margin-bottom: 10px;	
+}
+
+#menu #main {
+	/*top: 410px;*/
+}
+
+
+#menu #nav.menu_hidden,
+#menu #menu_content.menu_hidden {
+	height: 0px;
+	border: 0px;
+	margin-top: 0px;
+	overflow: hidden;
+}
+
+#menu #match_victoryParameter_custom_info {
+	width: 133px;
+}
+
+#bar_top,#bar_bottom {
+	width: 600px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+#bar_top {
+	height: 30px;
+}
+
+#bar_top #bar_top_main {
+	line-height: 2.6em;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#bar_top #bar_top_sub {
+	height: 0px;
+	overflow: hidden;
+	border-width: 0px;
+	line-height: 25px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#bar_top #bar_top_sub.open {
+	height: 97px;
+	margin-top: 1px;
+	border-width: 1px;
+	padding: 5px;
+}
+
+#bar_top #bar_top_sub>form {
+	float: left;
+}
+
+#bar_top #bar_top_sub_action {
+	float: right;
+	width: 150px;
+	text-align: center;
+	padding-top: 24px;
+}
+
+#bar_top #match_select_align {
+	width: 350px;	
+	height: 17px;
+}
+
+#bar_top #match_select,
+#bar_top #match_select>* {
+	width: 350px;	
+}
+
+#bar_top #match_select .col_1 {
+	position: absolute;
+	left: 5px;
+}
+
+#bar_top #match_select .col_2 {
+	position: absolute;
+	left: 45px;
+}
+
+#bar_top #match_select .col_3 {
+	position: absolute;
+	left: 260px;
+}
+
+#bar_top #match_filter_galaxy_select .col_1,
+#menu #match_galaxy_select_info .col_1,
+.manage_match .match_galaxy_select .col_1 {
+	position: absolute;
+	left: 5px;
+}
+
+#bar_top #match_filter_galaxy_select .col_2,
+#menu #match_galaxy_select_info .col_2,
+.manage_match .match_galaxy_select .col_2 {
+	position: absolute;
+	left: 30px;
+}
+
+#bar_top #match_filter_galaxy_select .col_3,
+#menu #match_galaxy_select_info .col_3,
+.manage_match .match_galaxy_select .col_3 {
+	position: absolute;
+	left: 250px;
+}
+
+#bar_top #match_info_button,
+#bar_top #match_create_button {
+	/* using centered_x centered_y*/
+	line-height: 16px;
+	width: 20px;
+	height: 16px;
+}
+
+#bar_top #match_info_button {
+	margin-right: 95px;
+}
+
+#bar_top #match_create_button {
+	margin-right: 66px;
+}
+
+#bar_top .top_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
+}
+
+#bar_bottom {
+	height: 34px;
+	line-height: 2.6em;
+	margin-bottom: 1px;
+	overflow: hidden;
+	transition: all 1s;
+}
+
+#bar_bottom.open {
+	height: 230px;
+}
+
+#bar_bottom>.log_bar {
+	display: inline;
+	top: 0px;
+	height: 32px;
+	margin-bottom: 1px;
+}
+
+#bar_bottom #log_title {
+	width: 110px;
+	position: absolute;
+	left: 0px;
+}
+
+#bar_bottom>#log {
+	position: absolute;
+	width: 374px;
+}
+
+#bar_bottom #log_menu {
+	width: 110px;
+	position: absolute;
+	right: 0px;
+}
+
+#bar_bottom .log_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
+}
+
+#bar_bottom .inner {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#bar_bottom.open #log_content {
+	opacity: 1;
+}
+
+#bar_bottom #log_content {
+	position: absolute;
+	top: 34px;
+	bottom: 0px;
+	overflow: hidden;
+	width: 599px;
+}
+
+#match_rank_table {
+	position: absolute;
+	top: 1px;
+	left: 1px;
+}
+
+#match_rank_table /*tbody*/ td:nth-child(1),
+#match_rank_table /*tbody*/ td:nth-child(3),
+#match_rank_table /*tbody*/ td:nth-child(4) {
+	text-align: right;
+}
+
+#match_system_info {
+	position: absolute;
+	left: 1px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	height: 200px;
+	width: 200px;
+}
+
+#match_system_info div {
+	width: 260px;
+	margin-bottom: 10px;
+}
+
+#match_system_info div.button {
+	line-height: 20px;
+}
+
+#match_system_info div.button label:after,
+#match_system_info div.button label:before {
+	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
+	background-position: 1px 4px;  /*Position of the background-image*/
+	content: '00';
+	color: rgba(0,0,0,0);
+	margin-left: 4px;
+	margin-right: 4px;
+	/* flip the arrow vertically */
+	-moz-transform: scaleY(-1);
+	-webkit-transform: scaleY(-1);
+	-o-transform: scaleY(-1);
+	transform: scaleY(-1);
+	-ms-filter: flipv; /*IE*/
+	filter: flipv; /*IE*/
+}
+
+#match_system_info div.button label:after {
+	float: right;
+}
+
+#match_system_info div.button label:before {
+	float: left;
+}
+
+#match_system_info table {
+	width: 100%;
+}
+
+#match_system_info table.target td {
+	border: 1px solid rgba(255,40,40,0.9);
+}
+
+#match_system_info table tr:nth-child(1) {
+	text-align: center;
+	font-weight: bold;
+}
+
+#match_system_info table td:nth-child(1) {
+	width: 40%;
+	font-weight: bold;
+}
+
+#match_system_info table td:nth-child(2) {
+	text-align: right;
+}
+
+#match_system_info table td:nth-child(3) {
+	width: 20%;
+	text-align: center;
+}
+
+.manage_match .match_title {
+	width: 436px;
+}
+
+.manage_match .match_galaxy_select,
+.manage_match .match_galaxy_select>* {
+	width: 438px;
+}
+
+.manage_match input,
+.manage_match .select,
+.manage_match .select > * {
+	float: left;
+}
+
+.manage_match .match_victoryParameter_custom {
+	width: 40px;
+	margin-left: 10px;
+}
+
+.manage_match label.match_participantsMin,
+.manage_match label.match_participantsMax {
+	width: 33px;
+}
+
+.manage_match input.match_participantsMin,
+.manage_match input.match_participantsMax {
+	width: 60px;
+	margin-right: 10px;
+}
+
+.manage_match .match_participants_target {
+	position: absolute;
+	right: 7px;
+}
+
+.manage_match .match_participants_target,
+.manage_match .match_participants_target ul {
+	width: 220px;
+}
+
+.manage_match .match_participants_target h4 {
+	margin-top: 10px;
+	margin-left: 2px;
+	margin-bottom: 10px;
+}
+
+.manage_match .match_participants_target ul {
+	height: 300px;
+}
+
+.manage_match .match_participants_source,
+.manage_match .match_participants_source ul {
+	width: 202px;
+	height: 100px;
+	float: left;
+}
+
+.manage_match .match_participants_source ul .col_1,
+.manage_match .match_participants_target ul .col_1 {
+	position: relative;
+	left: 0px; /* due to padding */
+}
+
+.manage_match .match_participants_source ul .col_2,
+.manage_match .match_participants_target ul .col_2 {
+	position: absolute;
+	left: 30px;
+}
+
+.manage_match .buttons {
+	flex-direction: row;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.manage_match .buttons .button.new.hidden,
+.manage_match .buttons .button.existing.hidden {
+	display: none;
+}
+
+.manage_match .buttons .button.new,
+.manage_match .buttons .button.existing {
+	flex-grow: 1;
+	margin: 5px;
+}
+
+.manage_match .buttons .button.icon {
+	flex-grow: 0;
+	flex-basis: 20px;
+	margin: 5px;
+}
+
+.send_population table {
+	width: 100%;
+}
+
+.send_population table thead,
+.send_population table tfoot {
+	font-weight: bold;
+}
+
+.send_population table tbody td:nth-child(2),
+.send_population table tbody td:nth-child(3),
+.send_population table tbody td:nth-child(4),
+.send_population table tfoot td:nth-child(2),
+.send_population table tfoot td:nth-child(3) {
+	text-align: right;
+}
+
+.send_population table tfoot td:nth-child(2) {
+	padding-right: 22px;
+}
+
+.send_population table tfoot td:nth-child(4),
+.send_population table tfoot td:nth-child(5),
+.send_population table tfoot td:nth-child(6) {
+	text-align: center;
+}
+
+.send_population .send_pop {
+	width: 100px;
+	text-align: right;
+}
+
+.send_population div.send_giveup {
+	margin-bottom: -6px;	
+}
+
+.send_population .send_giveup,
+.send_population .send_giveup>div,
+.send_population .send_giveup>ul {
+	width: 50px;
+}
+
+.send_population .send_giveup>ul {
+	margin-top: 0px;
+}
+
+.send_population .send_speed {
+	width: 60px;
+	text-align: right;
+}
+
+.send_population table tfoot .button {
+	height: 14px;
+	line-height: 14px;
+}
+
+.send_population table tfoot .button.send_giveup {
+	display: inline-block;
+	width: 30px;
+}
+
+.send_population #send_button {
+	margin-top: 10px;
+}
+
+.frame {
+	border: 1px solid rgba(0, 255, 255, 0.8);
+	background: rgba(0,86,86,0.9);
+}
+
+.red_frame {
+	border: 1px solid rgba(255,40,40,0.9);
+	background: rgba(86,13,13,0.9);
+}
+
+.transparent_frame {
+	border: 1px solid rgba(0,0,0,0);
+	background: rgba(0,0,0,0);
+}
+
+.button {
+	text-align: center;
+	font-weight: bold;
+}
+
+.button a {
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
+	display: block;
+	transition: background 0.5s;
+}
+
+.button a:hover {
+	background: rgba(0, 141, 141, 0.9);
+	transition: background 0.5s;
+}
+
+.button.disabled {
+	color: rgb(128,128,128);
+}
+
+.button,
+.button *{
+	cursor: pointer;
+}
+
+.welcome_toggle {
+	font-size: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.main {
+	width: 275px;
+	height: 150px;
+}
+
+#links,
+#overlay_links {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 10px;
+	margin-left: 0px;
+	margin-right: 0px;
+	text-align: center;
+}
+
+.logo_container {
+	width: 75px !important;
+	height: 75px;
+	bottom: 30px;
+}
+
+#logo_container2 {
+	bottom: 50px;
+}
+
+a {
+	color: rgba(255, 255, 255, 0.9);
+	cursor: pointer;
+}
+
+a * {
+	cursor: pointer;
+}
+
+.links a {
+	margin: 8px;
+}
+
+h1 {
+	margin-top: 0px;
+}
+
+h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;	
+}
+
+#showWelcome label {
+	position: relative;
+	bottom: 3px;
+	margin-left: 4px;
+}
+
+.form_message, .form_error {
+	border: 1px solid rgba(0,0,0,0);
+	height: 20px;
+	margin-top: 7px;
+}
+
+.form_error {
+	margin-top: -22px;
+}
+
+.form_message.show {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(0,0,0,0.3);
+}
+
+.form_error.show {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(255,40,40,0.9); 
+}
+
+#pinboard_news {
+	height: 300px;
+}
+
+#pinboard_chat,
+#pinboard_events {
+	height: 185px;
+	width: 590px;
+	line-height: 1em;
+}

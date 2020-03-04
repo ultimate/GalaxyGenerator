@@ -1,0 +1,75 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+.window {
+	border: 1px solid rgba(0, 0, 0, 0);
+	position: absolute;
+}
+
+.window,
+.window * {
+	transition: all 0.5s, z-index 0.01s, left 0.01s, top 0.01s;
+}
+
+.window .window_title {
+	position: absolute;
+	top: 0px;
+	height: 30px;
+	width: 100%;
+	margin-left: -1px; 
+}
+
+.window .window_title label {
+	padding: 10px;
+	position: relative;
+	top: 8px;
+	font-weight: bold;
+}
+
+.window .window_close {
+	position: absolute;
+	top: 6px;
+	right: 5px;
+	cursor: pointer;
+}
+
+.window .window_content {
+	position: absolute;
+	top: 32px;
+	bottom: 0px;
+	width: 100%;
+	margin-left: -1px;
+}
+
+.window .window_content>* {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	padding: 5px;
+}
+
+.window .window_content>*>div {
+	padding-top: 5px;	
+}
+
+.window .window_content iframe {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 100%;
+	width: 100%;
+	border: none;
+}

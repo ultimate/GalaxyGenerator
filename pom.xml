@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Copyright (c) 2020 ultimate
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ultimate</groupId>
+	<artifactId>GalaxyGenerator</artifactId>
+	<packaging>war</packaging>
+	<version>0.1</version>
+	<name>GalaxyGenerator</name>
+
+	<developers>
+		<developer>
+			<name>ultimate</name>
+			<email>ultimatej@gmx.net</email>
+		</developer>
+		<developer>
+			<name>moronicjoker</name>
+			<email></email>
+		</developer>
+	</developers>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${mvn.compiler.version}</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>${mvn.eclipse.version}</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<projectNameTemplate>[artifactId]</projectNameTemplate>
+					<workspace>${basedir}</workspace>
+					<workspaceActiveCodeStyleProfileName>format-java</workspaceActiveCodeStyleProfileName>
+					<workspaceCodeStylesURL>file:format-java.xml</workspaceCodeStylesURL>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${mvn.deploy.version}</version>
+				<configuration>
+					<skip>${mvn.deploy.skip}</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${mvn.resources.version}</version>
+				<configuration>
+					<webappDirectory>target/webapp</webappDirectory>
+					<attachClasses>true</attachClasses>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${mvn.war.version}</version>
+				<configuration>
+					<webappDirectory>target/webapp</webappDirectory>
+					<attachClasses>true</attachClasses>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.xls</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>mvnrepository.com</id>
+			<url>https://mvnrepository.com</url>
+		</repository>
+		<!--
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<url>https://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>glassfish-repository.dev.java.net</id>
+			<url>https://download.java.net/maven/glassfish</url>
+		</repository>
+		<repository>
+			<id>appfuse</id>
+			<url>https://static.appfuse.org/repository</url>
+		</repository>
+		-->
+	</repositories>
+
+	<pluginRepositories>
+		<!-- no additional plugin repos -->
+	</pluginRepositories>
+
+	<dependencies>
+		<!-- BASE - START -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- BASE - END -->
+		<!-- SPRING - START -->
+		<!-- 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		-->
+		<!-- SPRING - END -->
+		<!-- WEB - START -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+		<!-- WEB - END -->
+		<!-- UTILS - END -->
+		<!-- 
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons.lang.version}</version>
+		</dependency>
+        <dependency>
+			<groupId>java3d</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>${vecmath.version}</version>
+		</dependency>
+		-->
+		<!-- UTILS - END -->
+		<!-- TESTS - START -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+            <scope>test</scope>
+		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+            <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<version>${jmock.version}</version>
+            <scope>test</scope>
+		</dependency>
+		-->
+		<!-- TESTS - END -->
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>fullInstall</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.2</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.1.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+		
+		<!-- mvn Plugins -->
+		<mvn.compiler.version>3.8.1</mvn.compiler.version> <!-- 21.02.2020 -->
+		<mvn.eclipse.version>2.10</mvn.eclipse.version> <!-- 21.02.2020 -->
+		<mvn.deploy.version>3.0.0-M1</mvn.deploy.version> <!-- 21.02.2020 -->
+		<mvn.resources.version>3.1.0</mvn.resources.version> <!-- 21.02.2020 -->
+		<mvn.war.version>3.2.3</mvn.war.version> <!-- 21.02.2020 -->
+		
+		<!-- Global-Dependencies -->
+		<slf4j.version>1.7.30</slf4j.version> <!-- 21.02.2020 -->
+		<log4j.version>1.2.17</log4j.version> <!-- 21.02.2020 -->
+
+		<!-- Web-Dependencies -->
+		<servlet.version>3.1.1</servlet.version> <!-- 21.02.2020 -->
+		<jackson.version>2.10.2</jackson.version> <!-- 21.02.2020 -->
+    	<jetty.version>9.4.27.v20200227</jetty.version> <!-- 21.02.2020 -->
+		
+		<!-- Utils-Dependencies -->
+		<commons.lang.version>2.6</commons.lang.version> <!-- 21.02.2020 -->
+		<vecmath.version>1.3.1</vecmath.version>
+
+		<!-- Spring-Dependencies -->
+		<spring.version>5.2.3.RELEASE</spring.version> <!-- 21.02.2020 -->
+
+		<!-- Testing dependency versions -->
+		<jmock.version>2.12.0</jmock.version> <!-- 21.02.2020 -->
+		<junit.version>4.13</junit.version> <!-- 21.02.2020 -->
+
+		<!-- Profiles, Deployment etc. -->
+		<mvn.deploy.skip>false</mvn.deploy.skip>
+		
+		<!-- Other -->
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+	</properties>
+</project>

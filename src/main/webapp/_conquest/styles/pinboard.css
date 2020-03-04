@@ -1,0 +1,276 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * This file contains different pinboard styles.
+ * They may be used by simply adding the "root" class to the pinboard container.
+ * Available classes are:
+ * - blog
+ * - chat
+ * - eventlog
+ */
+ 
+/* general */
+
+.pinboard {
+	overflow: hidden;
+	position: relative;
+}
+
+.pinboard .messages {
+	overflow-y: scroll;
+	padding-right: 5px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	left: 0px;
+	height: auto;
+	width: auto;
+}
+
+.pinboard .input {
+	overflow: hidden;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+}
+  
+/* blog */
+
+.pinboard.blog .messages {
+	bottom: 100px;
+}
+
+.pinboard.blog .messages .message {
+	float: left;
+	width: 100%;
+	margin-bottom: 15px;
+}
+
+.pinboard.blog .messages .message .time {
+	float: right;
+	text-align: right;
+	width: 30%;
+}
+
+.pinboard.blog .messages .message .user {
+	display: none;
+}
+
+.pinboard.blog .messages .message .title {
+	float: left;
+	font-weight: bold;
+	width: 60%;
+}
+
+.pinboard.blog .messages .message .content {
+	float: left;
+	text-align: justify;
+	margin-top: 5px;
+	width: 100%;
+}
+
+.pinboard.blog .input {
+	height: 100px;
+}
+
+.pinboard.blog .input .title{
+	float: left;
+	font-weight: bold;
+	margin-top: 5px;
+	width: 60%;
+}
+
+.pinboard.blog .input .title input {
+	width: 100%;
+	heigth: 100%;
+}
+
+.pinboard.blog .input .content {
+	position: absolute;
+	top: 25px;
+	left: 0px;
+	right: 40px;
+	bottom: 0px;
+	border: 1px solid transparent;
+}
+
+.pinboard.blog .input .content textarea,
+.pinboard.blog .input .content input[type=text] {
+	width: 100%;
+	height: 100%;
+	resize: none;
+	margin: -1px;
+}
+
+.pinboard.blog .input .button {
+	position: absolute;
+	top: 25px;
+	right: 0px;
+	bottom: 0px;
+	width: 30px;
+}
+  
+/* chat */
+
+.pinboard.chat .messages {
+	bottom: 25px;
+}
+
+.pinboard.chat .messages .message {
+	display: block;
+	margin-bottom: 5px;
+}
+
+.pinboard.chat .messages .message .time {
+	float: left;
+}
+
+.pinboard.chat .messages .message .time:after {
+	content: "\a0-\a0"; /* \a0 for non-breaking space; \20 for breaking space */
+}
+
+.pinboard.chat .messages .message .user {
+	float: left;
+	font-weight: bold;
+}
+
+.pinboard.chat .messages .message .user:after {
+	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
+	margin-right: 10px;
+}
+
+.pinboard.chat .messages .message .title {
+	display: none;
+}
+
+.pinboard.chat .messages .message .content {
+	/*float: left;*/
+	/*margin-top: 5px;*/
+	text-align: justify;
+	margin-left: 10px;
+}
+
+.pinboard.chat .input {
+	height: 25px;
+}
+
+.pinboard.chat .input .title {
+	display: none;
+}
+
+.pinboard.chat .input .content {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	right: 40px;
+	bottom: 0px;
+	border: 1px solid transparent;
+}
+
+.pinboard.chat .input .content textarea,
+.pinboard.chat .input .content input[type=text] {
+	width: 100%;
+	height: 16px;
+	position: relative;
+	top: -1px;
+	resize: none;
+	margin: -1px;
+}
+
+.pinboard.chat .input .button {
+	position: absolute;
+	top: 5px;
+	right: 0px;
+	bottom: 0px;
+	width: 30px;
+}
+  
+  
+/* eventlog */
+
+.pinboard.eventlog .messages {
+	/*bottom: 25px;*/
+}
+
+.pinboard.eventlog .messages .message {
+	float: left;
+	width: 100%;
+	margin-bottom: 5px;
+}
+
+.pinboard.eventlog .messages .message .time {
+	float: left;
+	margin-right: 10px;
+}
+
+.pinboard.eventlog .messages .message .time:after {
+	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
+}
+
+.pinboard.eventlog .messages .message .user {
+	display: none;
+}
+
+.pinboard.eventlog .messages .message .title {
+	display: none;
+}
+
+
+.pinboard.eventlog .messages .message .content {
+	text-align: justify;
+	margin-left: 10px;
+}
+
+.pinboard.eventlog .input {
+	/*height: 25px;*/
+	display: none;
+}
+
+.pinboard.eventlog .input .title {
+	display: none;
+}
+
+.pinboard.eventlog .input .content {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	right: 40px;
+	bottom: 0px;
+	border: 1px solid transparent;
+}
+
+.pinboard.eventlog .input .content textarea,
+.pinboard.eventlog .input .content input[type=text] {
+	width: 100%;
+	height: 100%;
+	resize: none;
+	margin: -1px;
+}
+
+.pinboard.eventlog .input .button {
+	position: absolute;
+	top: 5px;
+	right: 0px;
+	bottom: 0px;
+	width: 30px;
+}
+
+/* noinput */
+
+.pinboard.noinput .messages {
+	bottom: 0px;
+}
