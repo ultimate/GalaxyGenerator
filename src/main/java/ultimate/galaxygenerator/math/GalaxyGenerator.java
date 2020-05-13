@@ -3,12 +3,13 @@ package ultimate.galaxygenerator.math;
 import java.util.Map;
 import java.util.Random;
 
-import ultimate.galaxygenerator.model.EnumGalaxyElement;
+import ultimate.galaxygenerator.model.EnumGalaxyElementType;
 import ultimate.galaxygenerator.model.GalaxySpecification;
 
+// TODO functions not yet implemented or not yet perfectly tuned
 public class GalaxyGenerator
 {
-	public static int[] nextCoordinate(GalaxySpecification specification, EnumGalaxyElement element, Map<String, Double> parameters)
+	public static int[] nextCoordinate(GalaxySpecification specification, EnumGalaxyElementType element, Map<String, Double> parameters)
 	{
 		switch(element)
 		{
@@ -74,7 +75,7 @@ public class GalaxyGenerator
 		double scale;
 		
 		// option 1
-		r = Math.pow(random.nextDouble(), 1.0 /3.0);
+		r = Math.pow(random.nextDouble(), 1.0 / 3.0);
 		// option 2
 		r = nextLimitedGaussian(random);
 		
@@ -101,11 +102,6 @@ public class GalaxyGenerator
 		return new int[] {0,0,0};
 	}
 	
-	public static void main(String[] args)
-	{
-		
-	}
-	
 	private static double nextLimitedGaussian(Random random)
 	{
 		double r;
@@ -115,5 +111,10 @@ public class GalaxyGenerator
 		}
 		while(r > 1);
 		return r;
+	}
+	
+	public static void main(String[] args)
+	{
+		
 	}
 }

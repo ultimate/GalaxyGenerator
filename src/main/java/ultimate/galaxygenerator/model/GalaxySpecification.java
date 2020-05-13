@@ -1,6 +1,8 @@
 package ultimate.galaxygenerator.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +36,12 @@ public class GalaxySpecification
 	protected int						zSize;
 
 	/**
-	 * The storage of the {@link EnumGalaxyElement} for this {@link GalaxySpecification}
+	 * The storage of the {@link EnumGalaxyElementType} for this {@link GalaxySpecification}
 	 */
-	private TreeMap<Double, Element>	elements;
+	private TreeMap<Double, GalaxyElement>	elements;
 
 	/**
-	 * The sum of the weights of all {@link EnumGalaxyElement}s in this {@link GalaxySpecification}
+	 * The sum of the weights of all {@link EnumGalaxyElementType}s in this {@link GalaxySpecification}
 	 */
 	private double						totalWeight;
 
@@ -83,13 +85,11 @@ public class GalaxySpecification
 	 * @param zSize - The dimension in Z direction
 	 * @param random - the random to use
 	 */
-	public GalaxySpecification(int xSize, int ySize, int zSize, Random random)
+	protected GalaxySpecification(int xSize, int ySize, int zSize, Random random)
 	{
 		super();
-		this.xSize = xSize;
-		this.ySize = ySize;
-		this.zSize = zSize;
-		this.elements = new TreeMap<Double, Element>();
+		this.setSize(xSize, ySize, zSize);
+		this.elements = new TreeMap<Double, GalaxyElement>();
 		this.random = random;
 		this.totalWeight = 0;
 	}
@@ -118,6 +118,15 @@ public class GalaxySpecification
 		return zSize;
 	}
 
+
+	/**
+	 * @return The volume as xSize * ySize * zSize
+	 */
+	public long getVolume()
+	{
+		return xSize * ySize * zSize;
+	}
+
 	/**
 	 * @return The random number generator
 	 */
@@ -127,16 +136,67 @@ public class GalaxySpecification
 	}
 
 	/**
+	 * @return The galaxy elements in this specification
+	 */
+	public Collection<GalaxyElement> getElements()
+	{
+		return Collections.unmodifiableCollection(this.elements.values());
+	}
+	
+	/**
+	 * Update the size for this specification.<br>
+	 * Note: priorly generated coordinates should be discarded or otherwise distribution may be inappropriate
+	 *   
+	 * @param xSize - The dimension in X direction
+	 * @param ySize - The dimension in Y direction
+	 * @param zSize - The dimension in Z direction
+	 */
+	public void setSize(int xSize, int ySize, int zSize)
+	{
+		if(xSize <= 0)
+			throw new IllegalArgumentException("xSize must not be 0 or negative");
+		if(ySize <= 0)
+			throw new IllegalArgumentException("ySize must not be 0 or negative");
+		if(zSize <= 0)
+			throw new IllegalArgumentException("zSize must not be 0 or negative");
+		this.xSize = xSize;
+		this.ySize = ySize;
+		this.zSize = zSize;
+	}
+	
+	/**
+	 * Update the seed for this specification
+	 * Note: Seed will apply for newly generated coordinates only
+	 * 
+	 * @param seed - the seed to use for the random
+	 */
+	public void setSeed(long seed)
+	{
+		this.setRandom(new Random(seed));
+	}
+
+	/**
+	 * Update the random for this specification
+	 * Note: random will apply for newly generated coordinates only
+	 * 
+	 * @param random - the random to use 
+	 */
+	protected void setRandom(Random random)
+	{
+		this.random = random;
+	}
+
+	/**
 	 * Add a new galaxy element to this specification
 	 * 
 	 * @param element - the element definition of the galaxy to add
 	 * @param weight - the weight of the element (relative to the other types added)
 	 * @param parameters - the parameters for this element (@see
-	 *            {@link EnumGalaxyElement#getRequiredParameters()} for required parameters
+	 *            {@link EnumGalaxyElementType#getRequiredParameters()} for required parameters
 	 */
-	public void addElement(EnumGalaxyElement element, double weight, Map<String, Double> parameters)
+	public void addElement(EnumGalaxyElementType element, double weight, Map<String, Double> parameters)
 	{
-		addElement(new Element(element, weight, parameters));
+		addElement(new GalaxyElement(this, element, weight, parameters));
 	}
 
 	/**
@@ -144,7 +204,7 @@ public class GalaxySpecification
 	 * 
 	 * @param element - the element as {@link GalaxySpecification#Element}
 	 */
-	public void addElement(Element element)
+	public void addElement(GalaxyElement element)
 	{
 		if(element == null)
 			throw new IllegalArgumentException("element must not be null!");
@@ -157,15 +217,24 @@ public class GalaxySpecification
 	 * 
 	 * @param elements - the elements as List of {@link GalaxySpecification#Element}
 	 */
-	public void addElements(List<Element> elements)
+	public void addElements(List<GalaxyElement> elements)
 	{
 		if(elements == null)
 			throw new IllegalArgumentException("elements must not be null!");
 		if(elements.contains(null))
 			throw new IllegalArgumentException("elements must not contain null!");
 
-		for(Element e : elements)
+		for(GalaxyElement e : elements)
 			this.addElement(e);
+	}
+	
+	/**
+	 * Remove all galaxy elements from this specification to start over
+	 */
+	public void clearElements()
+	{
+		this.elements.clear();
+		this.totalWeight = 0;
 	}
 
 	/**
@@ -175,9 +244,12 @@ public class GalaxySpecification
 	 */
 	public int[] nextCoordinate()
 	{
-		Element elem = this.elements.higherEntry(random.nextDouble() * this.totalWeight).getValue();
+		if(this.elements.size() == 0)
+			throw new IllegalStateException("no elements defined");
+		
+		GalaxyElement elem = this.elements.higherEntry(random.nextDouble() * this.totalWeight).getValue();
 
-		return GalaxyGenerator.nextCoordinate(this, elem.getElement(), elem.getParameters());
+		return GalaxyGenerator.nextCoordinate(this, elem.getType(), elem.getParameters());
 	}
 
 	/**
@@ -196,77 +268,6 @@ public class GalaxySpecification
 	}
 
 	/**
-	 * Internal class for storing the elements.
-	 */
-	private class Element
-	{
-		/**
-		 * the element definition
-		 */
-		protected EnumGalaxyElement		element;
-		/**
-		 * the weight of the element (relative to the other elements of this galaxy)
-		 */
-		protected double				weight;
-		/**
-		 * the parameters for this element
-		 */
-		protected Map<String, Double>	parameters;
-
-		/**
-		 * Create a new Element for inner storage
-		 * 
-		 * @param element - the element definition
-		 * @param weight - the weight of the element (relative to the other elements of this galaxy)
-		 * @param parameters - the parameters for this element
-		 */
-		public Element(EnumGalaxyElement element, double weight, Map<String, Double> parameters)
-		{
-			super();
-
-			if(element == null)
-				throw new IllegalArgumentException("element must not be null!");
-			if(weight <= 0.0)
-				throw new IllegalArgumentException("weight must not be 0 (zero) or negative!");
-
-			// check parameters
-			for(String key : element.getRequiredParameters())
-			{
-				if(!parameters.containsKey(key))
-					throw new IllegalArgumentException("required parameter '" + key + "' not found");
-			}
-
-			this.element = element;
-			this.weight = weight;
-			this.parameters = parameters;
-		}
-
-		/**
-		 * @return the element definition
-		 */
-		public EnumGalaxyElement getElement()
-		{
-			return element;
-		}
-
-		/**
-		 * @return the weight of the element (relative to the other elements of this galaxy)
-		 */
-		public double getWeight()
-		{
-			return weight;
-		}
-
-		/**
-		 * @return the parameters for this element
-		 */
-		public Map<String, Double> getParameters()
-		{
-			return parameters;
-		}
-	}
-	
-	/**
 	 * Elliptic galaxy as defined by https://en.wikipedia.org/wiki/Galaxy_morphological_classification
 	 * Note: represents E0-E7 depending on the dimensions  
 	 */
@@ -280,7 +281,7 @@ public class GalaxySpecification
 		
 		// initializer
 		{
-			this.addElement(EnumGalaxyElement.E, 1.0, NO_PARAMS);
+			this.addElement(EnumGalaxyElementType.E, 1.0, NO_PARAMS);
 		}
 	}
 
@@ -297,10 +298,10 @@ public class GalaxySpecification
 		
 		// initializer
 		{
-			this.addElement(EnumGalaxyElement.E, 1.0, NO_PARAMS);
+			this.addElement(EnumGalaxyElementType.E, 1.0, NO_PARAMS);
 			Map<String, Double> PARAMS_D = new HashMap<String, Double>();
 			PARAMS_D.put("thickness", 0.1);
-			this.addElement(EnumGalaxyElement.D, 0.75, PARAMS_D);
+			this.addElement(EnumGalaxyElementType.D, 0.75, PARAMS_D);
 		}
 	}
 }

@@ -3,7 +3,7 @@ package ultimate.galaxygenerator.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum EnumGalaxyElement
+public enum EnumGalaxyElementType
 {
 	/**
 	 * ellipse
@@ -33,7 +33,7 @@ public enum EnumGalaxyElement
 	/**
 	 * Get the list of required parameters.
 	 * 
-	 * @see GalaxySpecification#addElement(EnumGalaxyElement, double, java.util.Map)
+	 * @see GalaxySpecification#addElement(EnumGalaxyElementType, double, java.util.Map)
 	 * @return the list of parameter names
 	 */
 	public List<String> getRequiredParameters()
@@ -70,7 +70,7 @@ public enum EnumGalaxyElement
 	/**
 	 * Get the list of optional parameters.
 	 * 
-	 * @see GalaxySpecification#addElement(EnumGalaxyElement, double, java.util.Map)
+	 * @see GalaxySpecification#addElement(EnumGalaxyElementType, double, java.util.Map)
 	 * @return the list of parameter names
 	 */
 	public List<String> getOptionalParameters()
