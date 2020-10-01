@@ -535,10 +535,12 @@ var View = function(container) {
 	};
 	
 	// TODO for debug only
+	/*
 	var g = new THREE.CubeGeometry(100,100,100);
 	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	var cube = new THREE.Mesh( g, m );
 	this.scene.add(cube);
+	*/
 	// TODO end
 	
 	this.load = function(sectors, stepSize) {
