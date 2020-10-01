@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-var sectors = [
+galaxies["Spiral (medium)"] = [
 	[-980,-95,-6],
 	[-966,-143,2],
 	[-973,-131,14],

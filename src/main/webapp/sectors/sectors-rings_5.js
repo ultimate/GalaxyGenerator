@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-var sectors = [
+galaxies["Rings - 5"] = [
 	[-982,-94,8],
 	[-972,-174,15],
 	[-972,-67,11],

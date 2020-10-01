@@ -201,6 +201,7 @@ ViewUtil.GalaxyShader = function(imgPath) {
 		amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
 		color:     { type: "c", value: ViewUtil.WHITE },
 		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
+		//texture:   { type: "t", value: new THREE.TextureLoader().load( imgPath ) },
 	};
 	
 	this.vertexShader = ViewUtil.loadShader( "vertexshader" );

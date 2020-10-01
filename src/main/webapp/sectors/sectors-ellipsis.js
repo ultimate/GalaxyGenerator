@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-var sectors = [
+galaxies["Ellipsis"] = [
 	[-979,104,-53],
 	[-980,95,15],
 	[-959,-72,-16],

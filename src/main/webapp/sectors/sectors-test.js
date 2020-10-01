@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-var sectors = [
+galaxies["Test"] = [
 	[-200, 200, 200],	[-100, 200, 200],	[   0, 200, 200],	[ 100, 200, 200],	[ 200, 200, 200],
 	[-200, 100, 200],	[-100, 100, 200],	[   0, 100, 200],	[ 100, 100, 200],	[ 200, 100, 200],
 	[-200,   0, 200],	[-100,   0, 200],	[   0,   0, 200],	[ 100,   0, 200],	[ 200,   0, 200],
