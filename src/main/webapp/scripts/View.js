@@ -36,6 +36,7 @@ var View = function(container) {
 		up: new THREE.Vector3(0, 0, 1),
 		camera: new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 ),
 		projection: new THREE.Matrix4(), // set in update function
+		rotation: 0,
 		
 		animate: function(time) {
 			this.target.animate(time);
@@ -66,7 +67,16 @@ var View = function(container) {
 				this.camera.rotation.z += this.sphere_axis.value; // otherwise we will always look upright
 				
 				this.projection.multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse);
-		}
+		},
+		
+		rotate: function(direction) {
+			console.log("rotation = " + direction);
+			this.rotation = direction;
+			if(direction != 0)
+				this.sphere_phi.target = direction * Number.MAX_VALUE;
+			else
+				this.sphere_phi.target = this.sphere_phi.value;
+		},
 	};
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 

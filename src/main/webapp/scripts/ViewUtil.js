@@ -30,6 +30,7 @@ ViewUtil.AMPLITUDE = 500.0;
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
 ViewUtil.SELECTIONS_MAX = 2;
+ViewUtil.ROTATION_TIMEOUT = 3000;
 	
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
@@ -381,12 +382,20 @@ ViewUtil.EventManager = function(view)
 	this.lastY = 0;
 	this.inDragMode = false;
 	this.dragEventCount = 0;
+	this.cameraRotationBeforeDrag = 0;
+	this.cameraTimeout = null;
 		
 	this.handleDragStart = function(event) {
 		this.lastX = event.pageX;
 		this.lastY = event.pageY;
 		this.inDragMode = true;
 		this.dragEventCount = 0;
+		this.cameraRotationBeforeDrag = this.view.camera.rotation;
+		if(this.cameraTimeout != null)
+		{
+			clearTimeout(this.cameraTimeout);
+			this.cameraTimeout = null;
+		}
 	};
 		
 	this.handleDragStop = function(event) {
@@ -394,6 +403,9 @@ ViewUtil.EventManager = function(view)
 		if(this.dragEventCount < 5)
 			//this.handleClick(event);
 			onClick(event);
+		this.cameraTimeout = setTimeout(function(rotation) { return function() {
+			this.view.camera.rotate(rotation);
+		}; }(this.cameraRotationBeforeDrag), ViewUtil.ROTATION_TIMEOUT);
 	};
 		
 	this.handleDrag = function(event) {
@@ -402,8 +414,8 @@ ViewUtil.EventManager = function(view)
 			var x = event.pageX;
 			var y = event.pageY;
 			
-			this.view.camera.sphere_phi.target = camera.sphere_phi.value - (x-this.lastX)/window.innerWidth * Math.PI * 1.5;
-			this.view.camera.sphere_theta.target = camera.sphere_theta.value + (y-this.lastY)/window.innerHeight * Math.PI * 1.5;
+			this.view.camera.sphere_phi.target = this.view.camera.sphere_phi.value - (x-this.lastX)/window.innerWidth * Math.PI * 1.5;
+			this.view.camera.sphere_theta.target = this.view.camera.sphere_theta.value + (y-this.lastY)/window.innerHeight * Math.PI * 1.5;
 			
 			this.view.camera.sphere_phi.animate(ViewUtil.INSTANT);
 			this.view.camera.sphere_theta.animate(ViewUtil.INSTANT);
