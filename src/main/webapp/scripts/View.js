@@ -103,7 +103,7 @@ var View = function(container) {
 		//var size = system.size.value;
 		var p2 = this.camera.camera.position;
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-		return size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
+		return size / (2 * Math.tan((this.camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
 	};
 	
 	// TODO for debug only
@@ -164,7 +164,7 @@ var View = function(container) {
 		
 		// add planes for orientation
 		console.log("creating planes...");
-		var count = 9;
+		var divisions = 8;
 		var geometry;
 		var material;
 		var mesh;			
@@ -173,6 +173,7 @@ var View = function(container) {
 		if(this.planes.xy == null)
 		{			
 			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundY*2);					
+			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundY*2, divisions, divisions);					
 			material = this.materials.planeT.clone();
 			material.color = new THREE.Color(0x00ff99);		
 			this.planes.xy = new THREE.Mesh(geometry, material);
@@ -186,6 +187,7 @@ var View = function(container) {
 		if(this.planes.xz == null)
 		{
 			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundZ*2);				
+			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundZ*2, divisions, divisions);				
 			material = this.materials.planeT.clone();
 			material.color = new THREE.Color(0x9900ff);
 			this.planes.xz = new THREE.Mesh(geometry, material);
@@ -197,8 +199,9 @@ var View = function(container) {
 		// YZ		
 		console.log("YZ: " + this.galaxy.info.boundY*2 + " x " + this.galaxy.info.boundZ*2);		
 		if(this.planes.yz == null)
-		{
-			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundZ*2, this.galaxy.info.boundY*2);				
+		{			
+			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundZ*2, this.galaxy.info.boundY*2);
+			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundZ*2, this.galaxy.info.boundY*2, divisions, divisions);				
 			material = this.materials.planeT.clone();
 			material.color = new THREE.Color(0xff9900);
 			this.planes.yz = new THREE.Mesh(geometry, material);

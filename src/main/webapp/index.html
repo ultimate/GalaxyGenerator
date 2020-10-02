@@ -63,8 +63,8 @@
 						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	
 					
 						var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
-						projector.unprojectVector( vector, camera.camera );
-						var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
+						projector.unprojectVector( vector, view.camera.camera );
+						var ray = new THREE.Ray( view.camera.camera.position, vector.sub( view.camera.camera.position ).normalize() );
 						
 						var o = ray.origin;
 						var d = ray.direction;
@@ -150,9 +150,9 @@
 					console.log("sec1=" + (sec1 == null ? null : (sec1.x + "|" + sec1.y + "|" + sec1.z)) + " sec2=" + (sec2 == null ? null : (sec2.x + "|" + sec2.y + "|" + sec2.z)) );
 				}
 				if(activeSector == null)
-					camera.target.target = new THREE.Vector3(0,0,0);
+					view.camera.target.target = new THREE.Vector3(0,0,0);
 				else
-					camera.target.target = activeSector.coords.value;
+					view.camera.target.target = activeSector.coords.value;
 								
 				view.select(activeSector);
 				
@@ -260,6 +260,7 @@
 			
 			updateStars = function(firstCall)
 			{
+				console.log("update stars");
 				var factor = 0.6;				
 				var diffTreshold;
 				if(galaxy.animation == -1)

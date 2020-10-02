@@ -448,6 +448,10 @@ ViewUtil.EventManager = function(view)
 	Events.addEventListener("DOMMouseScroll", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
 };
 
+ViewUtil.Plane = function() {
+	
+};
+
 // for debugging without Request.js - START
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
