@@ -443,8 +443,7 @@
 				if(document.getElementById("rotateZ").checked)
 					camera.sphere_axis.target = Number.MAX_VALUE;
 				else
-					camera.sphere_axis.target = camera.sphere_axis.value;
-			
+					camera.sphere_axis.target = camera.sphere_axis.value;			
 			
 				camera.animate();
 				camera.update();
@@ -477,6 +476,7 @@
 				*/
 				view.load(sectors,1);
 				updatePlanes();
+				updateColors();
 				/*
 				createPlanes(galaxy.info);
 				//setTimeout(updateStars, 100);
