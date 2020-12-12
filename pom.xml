@@ -345,7 +345,7 @@
 
 		<!-- Testing dependency versions -->
 		<jmock.version>2.12.0</jmock.version> <!-- 21.02.2020 -->
-		<junit.version>4.13</junit.version> <!-- 21.02.2020 -->
+		<junit.version>4.13.1</junit.version> <!-- 21.02.2020 -->
 
 		<!-- Profiles, Deployment etc. -->
 		<mvn.deploy.skip>false</mvn.deploy.skip>
