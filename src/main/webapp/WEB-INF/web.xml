@@ -128,12 +128,12 @@
     <filter-mapping>
       	<filter-name>constantsFilter</filter-name>
       	<url-pattern>/scripts/constants.js</url-pattern>
-    </filter-mapping>		
-	 -->
+    </filter-mapping>	
     
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	</listener>	
+	 -->
 
 	<!--
 	<icon>
