@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- - Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
- - 
- - This program is free software; you can redistribute it and/or modify it under the terms of
- - the GNU General Public License as published by the Free Software Foundation; either version
- - 3 of the License, or any later version.
- - 
- - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- - See the GNU General Public License for more details.
- - 
- - You should have received a copy of the GNU General Plublic License along with this program;
- - if not, see <http://www.gnu.org/licenses/>.
+ - Copyright (c) 2020 ultimate
 -->
 
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"> 
 
-	<description><![CDATA[syncnapsis-universe-conquest]]></description>
-	<display-name>syncnapsis-universe-conquest</display-name>
+	<description><![CDATA[GalaxyGenerator]]></description>
+	<display-name>GalaxyGenerator</display-name>
 	
 	<servlet>
 		<servlet-name>default</servlet-name>
@@ -38,17 +27,11 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-            classpath*:/ctx-core-utils.xml
-            classpath*:/ctx-core-data.xml
-            classpath*:/ctx-hibernate-default.xml
-            classpath*:/ctx-core-websockets.xml
-            classpath*:/ctx-core-application-base.xml
-            classpath*:/ctx-core-game-base.xml
-            classpath*:/ctx-stats-base-impl.xml
-            classpath*:/ctx-universe-conquest.xml
+            classpath*:/ctx-default.xml
 		</param-value>
 	</context-param>
 	
+	<!-- 
     <filter>
         <filter-name>httpWebSocketFilter</filter-name>
         <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
@@ -146,6 +129,7 @@
       	<filter-name>constantsFilter</filter-name>
       	<url-pattern>/scripts/constants.js</url-pattern>
     </filter-mapping>		
+	 -->
     
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
