@@ -225,7 +225,7 @@ ViewUtil.GalaxyShader = function(imgPath) {
 		
 	this.material = new THREE.ShaderMaterial( {
 		uniforms: 		this.uniforms,
-		attributes:     this.attributes,
+		//attributes:     this.attributes, // TODO changed as of r72
 		vertexShader:   this.vertexShader,
 		fragmentShader: this.fragmentShader,
 		blending: 		THREE.AdditiveBlending,

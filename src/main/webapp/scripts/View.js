@@ -92,10 +92,115 @@ var View = function(container) {
 	
 	this.getScreenCoords = function(vector) {
 		var vec = vector.clone();
-		vec.applyProjection(this.camera.projection);
+		vec.applyMatrix4(this.camera.projection); // formerly: vec.applyProjection(this.camera.projection);
 		vec.x = (vec.x + 1) * this.container.offsetWidth / 2 + this.container.offsetLeft;
 		vec.y = (-vec.y + 1) * this.container.offsetHeight / 2 + this.container.offsetTop;
 		return vec;
+	};
+	
+	this.raycaster = new THREE.Raycaster();	
+	
+	this.findObjectsAt = function(screenX, screenY) {
+		var mouse = new THREE.Vector2();
+
+//		mouse.x = ( screenX / window.innerWidth ) * 2 - 1;
+//		mouse.y = - ( screenY / window.innerHeight ) * 2 + 1;	
+		
+		mouse.x = ( screenX / this.renderer.domElement.clientWidth ) * 2 - 1;
+		mouse.y = - ( screenY / this.renderer.domElement.clientHeight ) * 2 + 1;
+		
+		this.raycaster.setFromCamera(mouse, this.camera.camera);
+
+		return this.raycaster.intersectObjects(this.scene.children);
+	};
+	
+	this.findSectorAt = function(screenX, screenY) {		
+		var mouse = new THREE.Vector2();
+		var sec;
+
+		console.time("ray");
+		{		
+			// NOTE: this variant is faster but not as accurate
+			mouse.x = ( screenX / this.renderer.domElement.clientWidth ) * 2 - 1;
+			mouse.y = - ( screenY / this.renderer.domElement.clientHeight ) * 2 + 1;
+			
+			this.raycaster.setFromCamera(mouse, this.camera.camera);
+			
+			var o = this.raycaster.ray.origin;
+			var d = this.raycaster.ray.direction;
+			//console.log("origin: (" + o.x + "," + o.y + "," + o.z + ") direction: (" + d.x + "," + d.y + "," + d.z + ")");
+			var p;
+			var n = new THREE.Vector3(0,0,0);; // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
+			var dist2; // = (|n|)^2 // use square to avoid sqrt
+			var opd; // temp for (o-p)*d
+			var opdMin = 10000000;
+			var dist2Min = 10000000;
+					
+			for(var i = 0; i < this.galaxy.systems.length; i++)
+			{
+				p = this.galaxy.systems[i].coords.value;
+				size = this.galaxy.systems[i].size.value;
+				if(size == 0)
+					continue;
+				
+				opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
+				// opd is in direction to n (intersection have positive opd)
+				if(opd < 0) // wrong direction (behind the camera)
+					continue;
+				n.x = (o.x - p.x)+opd*d.x;
+				n.y = (o.y - p.y)+opd*d.y;
+				n.z = (o.z - p.z)+opd*d.z;
+				dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
+				//if(dist2 < 10000)
+				//	console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+				if(dist2 < dist2Min)
+						dist2Min = dist2;
+				if(opd < opdMin && dist2 <= size*size)
+				{
+					opdMin = opd;
+					sec = this.galaxy.systems[i];
+				}									
+			}
+		}
+		console.timeEnd("ray");
+		console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)));
+		
+		console.time("scr");
+		{	
+			// NOTE: this variant is slower but more accurate
+			mouse.x = screenX;
+			mouse.y = screenY;
+			
+			var p;
+			var dist2;
+			var screenCoords;
+			var screenSize;
+			var zMin = 10000000;
+			var distMin = 10000000;
+			
+			for(var i = 0; i < view.galaxy.systems.length; i++)
+			{
+				p = view.galaxy.systems[i];
+				if(p.size.value == 0)
+					continue;
+					
+				screenCoords = view.getScreenCoords(p.coords.value);
+				screenSize = view.getScreenSize(p.coords.value, p.size.value);
+				
+				dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
+				//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+				if((dist2 < distMin || (dist2 == distMin && screenCoords.z < zMin)) && dist2 < screenSize*screenSize/4)
+				{
+					zMin = screenCoords.z;
+					distMin = dist2;
+					sec = p;
+				}
+			}
+		}
+		console.timeEnd("scr");
+		console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)));
+		
+		return sec;
 	};
 	
 	this.getScreenSize = function(vector, size) { //system) {
@@ -107,13 +212,13 @@ var View = function(container) {
 	};
 	
 	// TODO for debug only
-	/*
+	
 	var g = new THREE.CubeGeometry(100,100,100);
 	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	var cube = new THREE.Mesh( g, m );
 	cube.name = "cube";
 	this.scene.add(cube);
-	*/
+	
 	// TODO end
 	
 	this.load = function(sectors, stepSize) {
