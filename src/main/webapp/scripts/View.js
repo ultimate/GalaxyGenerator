@@ -117,6 +117,7 @@ var View = function(container) {
 	this.findSectorAt = function(screenX, screenY) {		
 		var mouse = new THREE.Vector2();
 		var sec;
+		var secScreen;
 
 		console.time("ray");
 		{		
@@ -159,11 +160,11 @@ var View = function(container) {
 				{
 					opdMin = opd;
 					sec = this.galaxy.systems[i];
+					secScreen = this.getScreenCoords(sec.coords.value);
 				}									
 			}
 		}
-		console.timeEnd("ray");
-		console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)));
+		console.timeEnd("ray");console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)) + " @ screen coords=" + (secScreen == null ? null : (secScreen.x + "|" + secScreen.y + "|" + secScreen.z)));
 		
 		console.time("scr");
 		{	
@@ -178,14 +179,14 @@ var View = function(container) {
 			var zMin = 10000000;
 			var distMin = 10000000;
 			
-			for(var i = 0; i < view.galaxy.systems.length; i++)
+			for(var i = 0; i < this.galaxy.systems.length; i++)
 			{
-				p = view.galaxy.systems[i];
+				p = this.galaxy.systems[i];
 				if(p.size.value == 0)
 					continue;
 					
-				screenCoords = view.getScreenCoords(p.coords.value);
-				screenSize = view.getScreenSize(p.coords.value, p.size.value);
+				screenCoords = this.getScreenCoords(p.coords.value);
+				screenSize = this.getScreenSize(p.coords.value, p.size.value);
 				
 				dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
 				//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
@@ -194,11 +195,12 @@ var View = function(container) {
 					zMin = screenCoords.z;
 					distMin = dist2;
 					sec = p;
+					secScreen = screenCoords;
 				}
 			}
 		}
 		console.timeEnd("scr");
-		console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)));
+		console.log("sec=" + (sec == null ? null : (sec.coords.value.x + "|" + sec.coords.value.y + "|" + sec.coords.value.z)) + " @ screen coords=" + (secScreen == null ? null : (secScreen.x + "|" + secScreen.y + "|" + secScreen.z)));
 		
 		return sec;
 	};
