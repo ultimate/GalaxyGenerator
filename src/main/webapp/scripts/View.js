@@ -92,7 +92,7 @@ var View = function(container) {
 	
 	this.getScreenCoords = function(vector) {
 		var vec = vector.clone();
-		vec.applyMatrix4(this.camera.projection); // formerly: vec.applyProjection(this.camera.projection);
+		vec.applyMatrix4(this.camera.projection);
 		vec.x = (vec.x + 1) * this.container.offsetWidth / 2 + this.container.offsetLeft;
 		vec.y = (-vec.y + 1) * this.container.offsetHeight / 2 + this.container.offsetTop;
 		return vec;
