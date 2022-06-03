@@ -246,8 +246,8 @@ ViewUtil.Galaxy = function(systems) {
 		for(var v = 0; v < this.systemGeometry.vertices.length; v++)
 		{
 			this.systemGeometry.vertices[v] = ViewUtil.INFINITY.clone();
-			this.systemShader.attributes.size.value[v] = 0;
-			this.systemShader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+			this.systemShader.attributes.size.value[v] = 1;
+			this.systemShader.attributes.customColor.value[v] = ViewUtil.WHITE.clone();
 		}
 		this.systemGeometry.dynamic = true;
 		
