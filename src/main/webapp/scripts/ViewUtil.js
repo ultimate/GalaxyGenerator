@@ -222,6 +222,11 @@ ViewUtil.GalaxyShader = function(imgPath) {
 	
 	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
 	this.fragmentShader = ViewUtil.loadShader( "fragmentshader" );
+				
+	// TODO use
+	// https://threejs.org/docs/#api/en/materials/PointsMaterial
+	// or recheck / recreate
+	// https://threejs.org/docs/?q=shaderm#api/en/materials/ShaderMaterial	
 		
 	this.material = new THREE.ShaderMaterial( {
 		uniforms: 		this.uniforms,
@@ -232,6 +237,10 @@ ViewUtil.GalaxyShader = function(imgPath) {
 		depthTest: 		false,
 		transparent:	true,
 	});
+	
+	// TODO works with PointsMaterial - now make ShaderMaterial work again
+	
+	this.material = new THREE.PointsMaterial({size: 0.1});	
 };
 
 ViewUtil.Galaxy = function(systems) {
