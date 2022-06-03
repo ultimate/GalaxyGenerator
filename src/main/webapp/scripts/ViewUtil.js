@@ -216,8 +216,8 @@ ViewUtil.GalaxyShader = function(imgPath) {
 	this.uniforms = {
 		amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
 		color:     { type: "c", value: ViewUtil.WHITE },
-		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
-		//texture:   { type: "t", value: new THREE.TextureLoader().load( imgPath ) },
+		//texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
+		texture:   { type: "t", value: new THREE.TextureLoader().load( imgPath ) },
 	};
 	
 	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
@@ -251,7 +251,8 @@ ViewUtil.Galaxy = function(systems) {
 		}
 		this.systemGeometry.dynamic = true;
 		
-		this.systemParticles = new THREE.ParticleSystem(this.systemGeometry, this.systemShader.material);
+		//this.systemParticles = new THREE.ParticleSystem(this.systemGeometry, this.systemShader.material);
+		this.systemParticles = new THREE.Points(this.systemGeometry, this.systemShader.material);
 		this.systemParticles.name = "galaxy.systemParticles";
 		this.systemParticles.dynamic = true;
 	}
@@ -270,7 +271,8 @@ ViewUtil.Galaxy = function(systems) {
 		}
 		this.selectionGeometry.dynamic = true;
 		
-		this.selectionParticles = new THREE.ParticleSystem(this.selectionGeometry, this.selectionShader.material);
+		//this.selectionParticles = new THREE.ParticleSystem(this.selectionGeometry, this.selectionShader.material);
+		this.selectionParticles = new THREE.Points(this.selectionGeometry, this.selectionShader.material);
 		this.selectionParticles.name = "galaxy.selectionParticles";
 		this.selectionParticles.dynamic = true;
 	}
