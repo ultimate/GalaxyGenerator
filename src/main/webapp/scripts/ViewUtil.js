@@ -239,6 +239,7 @@ ViewUtil.GalaxyShader = function(imgPath) {
 	});
 	
 	// TODO works with PointsMaterial - now make ShaderMaterial work again
+	// https://stackoverflow.com/questions/66225871/how-to-give-each-point-its-own-color-in-threejs
 	
 	this.material = new THREE.PointsMaterial({size: 0.1});	
 };
