@@ -241,14 +241,64 @@ ViewUtil.GalaxyShader = function(imgPath) {
 	// TODO works with PointsMaterial - now make ShaderMaterial work again
 	// https://stackoverflow.com/questions/66225871/how-to-give-each-point-its-own-color-in-threejs
 	
-	this.material = new THREE.PointsMaterial({size: 0.1});	
+	this.material = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
 };
 
 ViewUtil.Galaxy = function(systems) {
 
+	this.info = new ViewUtil.GalaxyInfo();
+	
 	this.systems = systems; // TODO think about copying the array?!
 	
+	//this.systemCoords = new Int16Array(this.systems.length * 3);
+	//this.systemColors = new Int8Array(this.systems.length * 3);
+	//this.systemSizes  = new Int8Array(this.systems.length);
+	this.systemCoords = new Int16Array(this.systems.length * 3);
+	this.systemColors = new Int8Array(this.systems.length * 3);
+	this.systemSizes  = new Uint8Array(this.systems.length);
+		
+	let defaultCoord = ViewUtil.INFINITY.clone();
+	let defaultColor = ViewUtil.WHITE.clone();
+	let defaultSize = 1;
+			
+	for(let s = 0; s < this.systems.length; s++)
+	{
+		this.systems[s].index = s;
+		this.systems[s].galaxy = this;
+		this.systems[s].updateColor();
+		this.info.update(this.systems[s]);
+				
+		this.systemCoords[s*3+0] = defaultCoord.x;
+		this.systemCoords[s*3+1] = defaultCoord.y;
+		this.systemCoords[s*3+2] = defaultCoord.z;
+		
+		this.systemColors[s*3+0] = defaultColor.r;
+		this.systemColors[s*3+1] = defaultColor.g;
+		this.systemColors[s*3+2] = defaultColor.b;
+		
+		this.systemSizes[s]      = defaultSize;
+	}	
+		
+	this.systemGeometry = new THREE.BufferGeometry();	
+	//this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
+	//this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );	
+	this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
+	this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );		
+	this.systemGeometry.setAttribute("size",     new THREE.Uint8BufferAttribute( this.systemSizes, 1) );	
+	
+	this.systemMaterial = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
+	
+	this.systemParticles = new THREE.Points(this.systemGeometry, this.systemMaterial);
+	this.systemParticles.name = "galaxy.systemParticles";
+	this.systemParticles.dynamic = true;
+	
+	// TODO
+	this.selectionParticles = new THREE.Points();
+	
+	/*
 	{ // particles for all systems
+	
+		
 		this.systemShader = new ViewUtil.GalaxyShader("img/star.png");
 		
 		this.systemGeometry = new THREE.Geometry();
@@ -286,16 +336,7 @@ ViewUtil.Galaxy = function(systems) {
 		this.selectionParticles.name = "galaxy.selectionParticles";
 		this.selectionParticles.dynamic = true;
 	}
-
-	this.info = new ViewUtil.GalaxyInfo();
-			
-	for(var s = 0; s < this.systems.length; s++)
-	{
-		this.systems[s].index = s;
-		this.systems[s].galaxy = this;
-		this.systems[s].updateColor();
-		this.info.update(this.systems[s]);
-	}
+		*/
 	
 	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
 		
@@ -321,6 +362,9 @@ ViewUtil.Galaxy = function(systems) {
 				this.systems[s].animate(time);	
 		}
 		this.systemGeometry.verticesNeedUpdate = true;
+		
+		/*
+		TODO
 		this.systemShader.attributes.size.needsUpdate = true;	
 		this.systemShader.attributes.customColor.needsUpdate = true;
 		
@@ -341,7 +385,8 @@ ViewUtil.Galaxy = function(systems) {
 		}
 		this.selectionGeometry.verticesNeedUpdate = true;
 		this.selectionShader.attributes.size.needsUpdate = true;	
-		this.selectionShader.attributes.customColor.needsUpdate = true;	
+		this.selectionShader.attributes.customColor.needsUpdate = true;
+		*/	
 	};
 };
 
@@ -367,18 +412,24 @@ ViewUtil.System = function(x, y, z, size, heat) {
 	this.animate = function(time) {
 		if(this.coords.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
-			this.galaxy.systemGeometry.verticesNeedUpdate = true;
-		}
-		if(this.size.animate(time) || this.firstAnimation)
-		{
-			this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
-			this.galaxy.systemShader.attributes.size.needsUpdate = true;	
+			this.galaxy.systemGeometry.getAttribute("position").setXYZ(this.index, this.coords.value.x, this.coords.value.y, this.coords.value.z);
+			this.galaxy.systemGeometry.getAttribute("position").needsUpdate = true;
+			//this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
+			//this.galaxy.systemGeometry.verticesNeedUpdate = true;
 		}
 		if(this.color.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
-			this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
+			this.galaxy.systemGeometry.getAttribute("color").setXYZ(this.index, this.color.value.r, this.color.value.g, this.color.value.b);
+			this.galaxy.systemGeometry.getAttribute("color").needsUpdate = true;
+			//this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
+			//this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
+		}
+		if(this.size.animate(time) || this.firstAnimation)
+		{
+			this.galaxy.systemGeometry.getAttribute("size").setX(this.index, this.size.value);
+			this.galaxy.systemGeometry.getAttribute("size").needsUpdate = true;
+			//this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
+			//this.galaxy.systemShader.attributes.size.needsUpdate = true;	
 		}
 		
 		this.heat.animate(time);
