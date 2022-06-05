@@ -251,7 +251,7 @@
 			
 			updateTextures = function()
 			{
-				var colormodel = ViewUtil.ColorModel[checkedRadioButton("texturemodel")];
+				var texturemodel = ViewUtil.TextureModel[checkedRadioButton("texturemodel")];
 				console.log("updateTextures: " + texturemodel.name);
 				/*
 				for(i = 0; i < view.galaxy.systems.length; i++)
@@ -273,8 +273,7 @@
 				{	
 					if(typeof ViewUtil.ColorModel[cm] != "object")
 						continue;
-					var colormodel = ViewUtil.ColorModel[cm];
-					ViewUtil.ColorModel.createRadioButton(colormodel, cmDiv);
+					ViewUtil.ColorModel.createRadioButton(cm, cmDiv);
 				}
 				
 				var tmDiv = document.getElementById("texturemodels");
@@ -282,8 +281,7 @@
 				{	
 					if(typeof ViewUtil.TextureModel[tm] != "object")
 						continue;
-					var texturemodel = ViewUtil.TextureModel[tm];
-					ViewUtil.TextureModel.createRadioButton(texturemodel, tmDiv);
+					ViewUtil.TextureModel.createRadioButton(tm, tmDiv);
 				}
 			};	
 			

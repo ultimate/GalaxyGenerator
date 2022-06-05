@@ -3,7 +3,8 @@ ColorModel = {
 	width: 100,
 	height: 20,
 	// display helper
-	createRadioButton: function(colormodel, parentElement) {
+	createRadioButton: function(cm, parentElement) {
+		var colormodel = this[cm];
 		var div = document.createElement("div");
 		div.className = "model color";
 		var radio = document.createElement("input");

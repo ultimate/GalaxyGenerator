@@ -2,12 +2,13 @@ TextureModel = {
 	first: true,
 	size: 20,
 	// display helper
-	createRadioButton: function(texturemodel, parentElement) {
+	createRadioButton: function(tm, parentElement) {
+		var texturemodel = this[tm];
 		var div = document.createElement("div");
 		div.className = "model texture";
 		var radio = document.createElement("input");
 		radio.type = "radio";
-		radio.value = cm;
+		radio.value = tm;
 		radio.name = "texturemodel";
 		radio.onchange = updateTextures;
 		if(this.first)
