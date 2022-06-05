@@ -256,11 +256,11 @@ ViewUtil.Galaxy = function(systems) {
 	//this.systemSizes  = new Int8Array(this.systems.length);
 	this.systemCoords = new Int16Array(this.systems.length * 3);
 	this.systemColors = new Float32Array(this.systems.length * 3);
-	this.systemSizes  = new Uint8Array(this.systems.length);
+	this.systemSizes  = new Float32Array(this.systems.length);
 		
 	let defaultCoord = ViewUtil.INFINITY.clone();
 	let defaultColor = ViewUtil.WHITE.clone();
-	let defaultSize = 1;
+	let defaultSize = 10;
 			
 	for(let s = 0; s < this.systems.length; s++)
 	{
@@ -285,9 +285,21 @@ ViewUtil.Galaxy = function(systems) {
 	//this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );	
 	this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
 	this.systemGeometry.setAttribute("color",    new THREE.Float32BufferAttribute( this.systemColors, 3) );		
-	this.systemGeometry.setAttribute("size",     new THREE.Uint8BufferAttribute( this.systemSizes, 1) );	
+	this.systemGeometry.setAttribute("size",     new THREE.Float32BufferAttribute( this.systemSizes, 1) );	
 	
-	this.systemMaterial = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
+	//this.systemMaterial = new THREE.PointsMaterial( { vertexColors: true } );
+	this.systemMaterial = new THREE.ShaderMaterial( {
+		uniforms: {
+			color: { value: new THREE.Color( 0xffffff ) },
+			//pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
+			pointTexture: { value: new THREE.TextureLoader().load( "img/star.png" ) }
+		},
+		vertexShader: ViewUtil.loadShader("vertexshader"),
+		fragmentShader: ViewUtil.loadShader("fragmentshader"),
+		blending: THREE.AdditiveBlending,
+		depthTest: false,
+		transparent: true
+	} );	
 	
 	this.systemParticles = new THREE.Points(this.systemGeometry, this.systemMaterial);
 	this.systemParticles.name = "galaxy.systemParticles";
@@ -521,25 +533,24 @@ ViewUtil.Plane = function() {
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
 	{	
-		return "uniform float amplitude;\
-attribute float size;\
+		return "attribute float size;\
 attribute vec3 customColor;\
 varying vec3 vColor;\
 void main() {\
 	vColor = customColor;\
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
-	gl_PointSize = size * ( amplitude / length( mvPosition.xyz ) );\
+	gl_PointSize = size * ( 100.0 / -mvPosition.z );\
 	gl_Position = projectionMatrix * mvPosition;\
 }";
 	}
 	else if(name == "fragmentshader")
 	{
 		return "uniform vec3 color;\
-uniform sampler2D texture;\
+uniform sampler2D pointTexture;\
 varying vec3 vColor;\
 void main() {\
 	gl_FragColor = vec4( color * vColor, 1.0 );\
-	gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );\
+	gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );\
 }";
 	}
 };

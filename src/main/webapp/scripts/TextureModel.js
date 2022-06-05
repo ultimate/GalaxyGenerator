@@ -20,6 +20,7 @@ TextureModel = {
 		var canvas = document.createElement("canvas");
 		canvas.setAttribute("width", this.size);
 		canvas.setAttribute("height", this.size);
+		canvas.id = "texture_" + tm;
 		div.appendChild(canvas);
 		var desc = document.createElement("span");
 		desc.className = "description";
