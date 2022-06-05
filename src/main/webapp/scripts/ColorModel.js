@@ -1,9 +1,11 @@
 ColorModel = {
 	first: true,
+	width: 100,
+	height: 20,
 	// display helper
 	createRadioButton: function(colormodel, parentElement) {
 		var div = document.createElement("div");
-		div.className = "colormodel";
+		div.className = "model color";
 		var radio = document.createElement("input");
 		radio.type = "radio";
 		radio.value = cm;
@@ -15,94 +17,61 @@ ColorModel = {
 			this.first = false;
 		}
 		div.appendChild(radio);
-		var bar = document.createElement("div");
-		bar.className = "colorbar";
-		div.appendChild(bar);
+		var canvas = document.createElement("canvas");
+		canvas.setAttribute("width", this.width);
+		canvas.setAttribute("height", this.height);
+		div.appendChild(canvas);
 		var desc = document.createElement("span");
-		desc.className = "colorbar_description";
-		desc.innerHTML = "(" + colormodel.type + ": " + colormodel.name + ")";
+		desc.className = "description";
+		desc.innerHTML = "(" + colormodel.name + ")";
 		div.appendChild(desc);
 		parentElement.appendChild(div);
-		var steps = 100;
 		console.log("adding colormodel: " + colormodel.name);
-		for(i = 0; i <= steps; i++)
+		var ctx = canvas.getContext("2d");
+		ctx.clearRect(0, 0, this.width, this.height);
+		for(let i = 0; i <= this.width; i++)
 		{
-			if(debugRGB)
-			{
-				for(h = 0; h < 3; h++)
-				{
-					var div2 = document.createElement("div");
-					div2.style.position = "absolute";
-					div2.style.top = h*30  + "%";
-					div2.style.left = i + "%";					
-					div2.style.width = "1%";
-					div2.style.height = "30%";
-					var c = colormodel.getRGB(i/steps, i/steps, i/steps);
-					var cs;
-					if(h == 0)
-						cs = "rgb(" + Math.round(c.r*255) + ",0,0)";
-					if(h == 1)
-						cs = "rgb(0," + Math.round(c.g*255) + ",0)";
-					if(h == 2)
-						cs = "rgb(0,0," + Math.round(c.b*255) + ")";
-					div2.style.background = cs;
-					bar.appendChild(div2);						
-				}
-			}
-			else
-			{
-				div2 = document.createElement("div");
-				div2.style.position = "absolute";
-				div2.style.left = i + "%";					
-				div2.style.width = "1%";
-				div2.style.height = "100%";
-				var c = colormodel.getRGB(i/steps, i/steps, i/steps);
-				var cs= "rgb(" + Math.round(c.r*255) + "," + Math.round(c.g*255) + "," + Math.round(c.b*255) + ")";
-				div2.style.background = cs;
-				bar.appendChild(div2);						
-			}
+			let arg = i/this.width;
+			let color = colormodel.getRGB(arg, arg, arg);
+			console.log("draw: " + arg + " " + color.getHexString());
+			ctx.fillStyle = "#" + color.getHexString();
+			ctx.fillRect(i,0,1,this.height);
 		}
 	},
 	
 	// available models
 	white: {
 		name: "white",
-		type: "fixed",
 		getRGB: function(size, heat, radius) {
 			return new THREE.Color(1,1,1);
 		}
 	},	
 	yellowwhite1: {
-		name: "yellowwhite1",
-		type: "heat",
+		name: "H: yellow - white",
 		getRGB: function(size, heat, radius) {
 			return new THREE.Color(1,1,Math.sqrt(heat));
 		}
 	},	
 	yellowwhite2: {
 		name: "yellowwhite2",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			return new THREE.Color(1,1,heat);
 		}
 	},	
 	yellowwhite3: {
 		name: "yellowwhite3",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			return new THREE.Color(1,1,Math.pow(heat,2));
 		}
 	},	
 	yellow: {
 		name: "yellow",
-		type: "fixed",
 		getRGB: function(size, heat, radius) {
 			return new THREE.Color(1,1,0);
 		}
 	},	
 	fullrange1 : {
 		name: "fullrange1",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -124,7 +93,6 @@ ColorModel = {
 	},
 	fullrange2 : {
 		name: "fullrange2",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -146,7 +114,6 @@ ColorModel = {
 	},
 	partrange1a: {
 		name: "partrange1a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -160,7 +127,6 @@ ColorModel = {
 	},	
 	partrange1b: {
 		name: "partrange1b",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -174,7 +140,6 @@ ColorModel = {
 	},	
 	partrange1c: {
 		name: "partrange1c",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -188,7 +153,6 @@ ColorModel = {
 	},	
 	partrange1d: {
 		name: "partrange1d",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -202,7 +166,6 @@ ColorModel = {
 	},	
 	partrange2a: {
 		name: "partrange2a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -217,7 +180,6 @@ ColorModel = {
 	},	
 	partrange2b: {
 		name: "partrange2b",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -232,7 +194,6 @@ ColorModel = {
 	},	
 	orangewhite1: {
 		name: "orangewhite1",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			var greenStart = 0.6;	
@@ -241,7 +202,6 @@ ColorModel = {
 	},	
 	orangewhite2: {
 		name: "orangewhite2",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			var greenStart = 0.6;	
@@ -250,7 +210,6 @@ ColorModel = {
 	},	
 	fullrange3a : {
 		name: "fullrange3a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -267,7 +226,6 @@ ColorModel = {
 	},
 	fullrange3b : {
 		name: "fullrange3b",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -284,7 +242,6 @@ ColorModel = {
 	},
 	fullrange4a : {
 		name: "fullrange4a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -302,7 +259,6 @@ ColorModel = {
 	},
 	fullrange4b : {
 		name: "fullrange4a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -320,7 +276,6 @@ ColorModel = {
 	},
 	fullrange5a : {
 		name: "fullrange5a",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -339,7 +294,6 @@ ColorModel = {
 	},
 	fullrange5b : {
 		name: "fullrange5b",
-		type: "heat",
 		getRGB: function(size, heat, radius) {
 			var param = heat;
 			
@@ -358,7 +312,6 @@ ColorModel = {
 	},
 	fullcolorrange : {
 		name: "fullcolorrange",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = radius;
 			
@@ -384,7 +337,6 @@ ColorModel = {
 	},
 	bluewhite1 : {
 		name: "bluewhite1",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			return new THREE.Color(param, param, 1);
@@ -392,7 +344,6 @@ ColorModel = {
 	},	
 	bluewhite2 : {
 		name: "bluewhite2",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			return new THREE.Color(Math.pow(param,2), Math.sqrt(param), 1);
@@ -400,7 +351,6 @@ ColorModel = {
 	},	
 	bluewhite3 : {
 		name: "bluewhite3",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			return new THREE.Color(Math.sqrt(param), Math.pow(param,2), 1);
@@ -408,7 +358,6 @@ ColorModel = {
 	},	
 	spectrum1 : {
 		name: "spectrum1",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			
@@ -426,7 +375,6 @@ ColorModel = {
 	},	
 	spectrum2 : {
 		name: "spectrum2",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			
@@ -444,7 +392,6 @@ ColorModel = {
 	},
 	spectrum3 : {
 		name: "spectrum3",
-		type: "radius",
 		getRGB: function(size, heat, radius) {
 			var param = 1-radius;
 			
