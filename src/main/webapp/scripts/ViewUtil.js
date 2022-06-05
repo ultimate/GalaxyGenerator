@@ -294,8 +294,10 @@ ViewUtil.Galaxy = function(systems) {
 			//pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
 			pointTexture: { value: new THREE.TextureLoader().load( "img/star.png" ) }
 		},
-		vertexShader: ViewUtil.loadShader("vertexshader"),
-		fragmentShader: ViewUtil.loadShader("fragmentshader"),
+		//vertexShader: ViewUtil.loadShader("vertexshader"),
+		//fragmentShader: ViewUtil.loadShader("fragmentshader"),
+		vertexShader: document.getElementById( 'vertexshader' ).textContent,
+		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
 		blending: THREE.AdditiveBlending,
 		depthTest: false,
 		transparent: true
