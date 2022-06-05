@@ -291,8 +291,8 @@ ViewUtil.Galaxy = function(systems) {
 	this.systemMaterial = new THREE.ShaderMaterial( {
 		uniforms: {
 			color: { value: new THREE.Color( 0xffffff ) },
-			//pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
-			pointTexture: { value: new THREE.TextureLoader().load( "img/star.png" ) }
+			pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
+			//pointTexture: { value: new THREE.TextureLoader().load( "img/star.png" ) }
 		},
 		//vertexShader: ViewUtil.loadShader("vertexshader"),
 		//fragmentShader: ViewUtil.loadShader("fragmentshader"),

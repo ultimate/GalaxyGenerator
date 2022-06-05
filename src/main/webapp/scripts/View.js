@@ -82,7 +82,7 @@ var View = function(container) {
 	this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	this.scene = new THREE.Scene(); 
 	
-	this.cube = new THREE.Mesh( new THREE.CubeGeometry(100,100,100), new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) ); // for DEBUG
+	this.cube = new THREE.Mesh( new THREE.BoxGeometry(100,100,100), new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) ); // for DEBUG
 	this.cube.name = "cube";
 	this.scene.add(this.cube);
 	
