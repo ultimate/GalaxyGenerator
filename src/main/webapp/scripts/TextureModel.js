@@ -33,8 +33,8 @@ TextureModel = {
 	},
 	
 	// available models
-	soft: {
-		name: "soft",
+	softdot: {
+		name: "soft dot",
 		draw: function(ctx, size) {
 			var grd = ctx.createRadialGradient(0, 0, size/10, 0, 0, size/2);
 			grd.addColorStop(0, "rgba(255,255,255,1)");
