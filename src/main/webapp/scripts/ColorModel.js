@@ -33,7 +33,7 @@ ColorModel = {
 		{
 			let arg = i/this.width;
 			let color = colormodel.getRGB(arg, arg, arg);
-			console.log("draw: " + arg + " " + color.getHexString());
+			//console.log("draw: " + arg + " " + color.getHexString());
 			ctx.fillStyle = "#" + color.getHexString();
 			ctx.fillRect(i,0,1,this.height);
 		}
