@@ -166,6 +166,7 @@ ViewUtil.AnimatedColor = function(initialValue, animationSpeed) {
 };
 
 ViewUtil.ColorModel = ColorModel;
+ViewUtil.TextureModel = TextureModel;
 
 ViewUtil.GalaxyInfo = function() {
 	this.reset = function() {

@@ -19,7 +19,8 @@
 		<script type="text/javascript" src="scripts/three.min-124.js"></script>
 		<script type="text/javascript" src="scripts/stats.min.js"></script>
 		<script type="text/javascript" src="scripts/Events.js"></script>		
-		<script type="text/javascript" src="scripts/ColorModel.js"></script>		
+		<script type="text/javascript" src="scripts/ColorModel.js"></script>	
+		<script type="text/javascript" src="scripts/TextureModel.js"></script>		
 		<script type="text/javascript" src="scripts/ViewUtil.js"></script>		
 		<script type="text/javascript" src="scripts/View.js"></script>			
 		<script type="text/javascript">
@@ -65,8 +66,8 @@
 					option.appendChild(text);
 					select.appendChild(option);
 				}
-				// add color choices				
-				showStarColors();
+				// add color & texture choices				
+				showOptions();
 				
 				view = new View(document.getElementById("view"));
 				
@@ -297,6 +298,7 @@
 			updateColors = function()
 			{
 				var colormodel = ViewUtil.ColorModel[checkedRadioButton("colormodel")];
+				console.log("updateColors: " + colormodel.name);
 				for(i = 0; i < view.galaxy.systems.length; i++)
 				{
 					view.galaxy.systems[i].colorModel = colormodel;
@@ -305,78 +307,42 @@
 				view.galaxy.systemGeometry.getAttribute("color").needsUpdate = true;
 				//view.galaxy.systemShader.attributes.customColor.needsUpdate = true;
 			};
+			
+			updateTextures = function()
+			{
+				var colormodel = ViewUtil.ColorModel[checkedRadioButton("texturemodel")];
+				console.log("updateTextures: " + texturemodel.name);
+				/*
+				for(i = 0; i < view.galaxy.systems.length; i++)
+				{
+					view.galaxy.systems[i].colorModel = colormodel;
+					view.galaxy.systems[i].updateColor();
+				}
+				view.galaxy.systemGeometry.getAttribute("color").needsUpdate = true;
+				//view.galaxy.systemShader.attributes.customColor.needsUpdate = true;
+				*/
+			};
 						
 			var debugRGB = false;
 						
-			showStarColors = function()
+			showOptions = function()
 			{
-				var first = true;
 				var cmDiv = document.getElementById("colormodels");
 				for(cm in ViewUtil.ColorModel)
 				{	
-					if(typeof ViewUtil.ColorModel[cm] == "function")
+					if(typeof ViewUtil.ColorModel[cm] != "object")
 						continue;
 					var colormodel = ViewUtil.ColorModel[cm];
-					var div = document.createElement("div");
-					div.className = "colormodel";
-					var radio = document.createElement("input");
-					radio.type = "radio";
-					radio.value = cm;
-					radio.name = "colormodel";
-					radio.onchange = updateColors;
-					if(first)
-					{
-						radio.checked = "checked";
-						first = false;
-					}
-					div.appendChild(radio);
-					var bar = document.createElement("div");
-					bar.className = "colorbar";
-					div.appendChild(bar);
-					var desc = document.createElement("span");
-					desc.className = "colorbar_description";
-					desc.innerHTML = "(" + colormodel.name + ")";
-					div.appendChild(desc);
-					cmDiv.appendChild(div);
-					var steps = 100;
-					console.log("adding colormodel: " + cm);
-					for(i = 0; i <= steps; i++)
-					{
-						if(debugRGB)
-						{
-							for(h = 0; h < 3; h++)
-							{
-								var div2 = document.createElement("div");
-								div2.style.position = "absolute";
-								div2.style.top = h*30  + "%";
-								div2.style.left = i + "%";					
-								div2.style.width = "1%";
-								div2.style.height = "30%";
-								var c = colormodel.getRGB(i/steps, i/steps, i/steps);
-								var cs;
-								if(h == 0)
-									cs = "rgb(" + Math.round(c.r*255) + ",0,0)";
-								if(h == 1)
-									cs = "rgb(0," + Math.round(c.g*255) + ",0)";
-								if(h == 2)
-									cs = "rgb(0,0," + Math.round(c.b*255) + ")";
-								div2.style.background = cs;
-								bar.appendChild(div2);						
-							}
-						}
-						else
-						{
-							div2 = document.createElement("div");
-							div2.style.position = "absolute";
-							div2.style.left = i + "%";					
-							div2.style.width = "1%";
-							div2.style.height = "100%";
-							var c = colormodel.getRGB(i/steps, i/steps, i/steps);
-							var cs= "rgb(" + Math.round(c.r*255) + "," + Math.round(c.g*255) + "," + Math.round(c.b*255) + ")";
-							div2.style.background = cs;
-							bar.appendChild(div2);						
-						}
-					}	
+					ViewUtil.ColorModel.createRadioButton(colormodel, cmDiv);
+				}
+				
+				var tmDiv = document.getElementById("texturemodels");
+				for(tm in ViewUtil.TextureModel)
+				{	
+					if(typeof ViewUtil.TextureModel[tm] != "object")
+						continue;
+					var texturemodel = ViewUtil.TextureModel[tm];
+					ViewUtil.TextureModel.createRadioButton(texturemodel, tmDiv);
 				}
 			};	
 			
@@ -415,7 +381,7 @@
 				position: absolute;
 				top: 0px;
 				left: 0px;
-				width: 270px;
+				width: 350px;
 				height: 100%;
 				background: #111111;
 				color: #AAAAAA;
@@ -452,6 +418,23 @@
 				top: -19px;
 				margin-bottom: -22px;
 			}
+			.model {
+				height: 20px;
+			}
+			.model canvas {
+				/*height: 20px;*/
+				position: relative;
+				top: -16px;
+				left: 5px;
+				margin-bottom: -22px;
+				border: 1px solid #000000;
+			}
+			.model.texture canvas {
+				/*width: 20px;*/ 
+			}
+			.model .description {
+				margin-left: 10px;
+			}
 		-->
 		</style>		
 	</head>
@@ -473,6 +456,8 @@
 			&nbsp;<select id="select_galaxy" size="1" onchange="selectGalaxy();"></select><br>
 			Colormodel?<br>
 			<div id="colormodels"><!-- generated by JS --></div>
+			Texture?<br>
+			<div id="texturemodels"><!-- generated by JS --></div>
 		</div>
 		<div style="display: none;">
 			<script type="text/javascript" src="sectors/sectors-0.1-medium.js"></script>
