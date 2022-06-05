@@ -255,7 +255,7 @@ ViewUtil.Galaxy = function(systems) {
 	//this.systemColors = new Int8Array(this.systems.length * 3);
 	//this.systemSizes  = new Int8Array(this.systems.length);
 	this.systemCoords = new Int16Array(this.systems.length * 3);
-	this.systemColors = new Int8Array(this.systems.length * 3);
+	this.systemColors = new Float32Array(this.systems.length * 3);
 	this.systemSizes  = new Uint8Array(this.systems.length);
 		
 	let defaultCoord = ViewUtil.INFINITY.clone();
@@ -284,7 +284,7 @@ ViewUtil.Galaxy = function(systems) {
 	//this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
 	//this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );	
 	this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
-	this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );		
+	this.systemGeometry.setAttribute("color",    new THREE.Float32BufferAttribute( this.systemColors, 3) );		
 	this.systemGeometry.setAttribute("size",     new THREE.Uint8BufferAttribute( this.systemSizes, 1) );	
 	
 	this.systemMaterial = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
@@ -408,6 +408,7 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		var z = this.coords.target.z;
 		this.radius = Math.sqrt(x*x + y*y + z*z);
 		this.color.target = this.colorModel.getRGB(this.size.target, this.heat.target, this.radius / this.galaxy.info.maxR);
+		//console.log("s=" + this.size.target + ", h=" + this.heat.target + ", r=" + this.radius + " ->" + this.color.target.getHexString());
 	};
 	
 	this.animate = function(time) {

@@ -252,6 +252,8 @@
 					view.planes.xz.material.visible = document.getElementById("planesXZ").checked;
 				if(view.planes.yz)
 					view.planes.yz.material.visible = document.getElementById("planesYZ").checked;
+				if(view.cube)
+					view.cube.material.visible = document.getElementById("cube").checked;
 			};
 			
 			updateRotation = function()
@@ -381,7 +383,7 @@
 				position: absolute;
 				top: 0px;
 				left: 0px;
-				width: 350px;
+				width: 320px;
 				height: 100%;
 				background: #111111;
 				color: #AAAAAA;
@@ -400,37 +402,15 @@
 				width: 100%;
 				height: 100%;
 			}
-			.colormodel {
-				height: 20px;
-			}
-			.colorbar {
-				width: 200px;
-				height: 20px;
-				position: relative;
-				left: 30px;
-				top: -20px;
-				margin-bottom: -22px;
-				border: 1px solid #000000;
-			}
-			.colorbar_description {
-				position: relative;
-				left: 240px;
-				top: -19px;
-				margin-bottom: -22px;
-			}
 			.model {
 				height: 20px;
 			}
 			.model canvas {
-				/*height: 20px;*/
 				position: relative;
 				top: -16px;
 				left: 5px;
 				margin-bottom: -22px;
 				border: 1px solid #000000;
-			}
-			.model.texture canvas {
-				/*width: 20px;*/ 
 			}
 			.model .description {
 				margin-left: 10px;
@@ -446,6 +426,7 @@
 			<input type="checkbox" id="planesXY" onchange="updatePlanes();"/> XY &nbsp;
 			<input type="checkbox" id="planesXZ" onchange="updatePlanes();"/> XZ &nbsp;
 			<input type="checkbox" id="planesYZ" onchange="updatePlanes();"/> YZ &nbsp;
+			<input type="checkbox" id="cube"     onchange="updatePlanes();"/> Debug-Cube &nbsp;
 			<br>
 			Rotate?<br>
 			<input type="radio" id="rotateCW"  name="rotation" onchange="updateRotation();"/> CW &nbsp;

@@ -81,6 +81,11 @@ var View = function(container) {
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	this.scene = new THREE.Scene(); 
+	
+	this.cube = new THREE.Mesh( new THREE.CubeGeometry(100,100,100), new THREE.MeshBasicMaterial( { color: 0x00ff00 } ) ); // for DEBUG
+	this.cube.name = "cube";
+	this.scene.add(this.cube);
+	
 	this.planes = {};
 	
 	this.updateSize = function() {
@@ -212,16 +217,6 @@ var View = function(container) {
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
 		return size / (2 * Math.tan((this.camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
 	};
-	
-	// TODO for debug only
-	
-	var g = new THREE.CubeGeometry(100,100,100);
-	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	var cube = new THREE.Mesh( g, m );
-	cube.name = "cube";
-	this.scene.add(cube);
-	
-	// TODO end
 	
 	this.load = function(sectors, stepSize) {
 		console.log("loading " + sectors.length + " sectors...");
