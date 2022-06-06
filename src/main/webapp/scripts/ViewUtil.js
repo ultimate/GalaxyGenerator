@@ -25,7 +25,12 @@ ViewUtil.RED = new THREE.Color(1,0,0);
 ViewUtil.GREEN = new THREE.Color(0,1,0);
 ViewUtil.BLUE = new THREE.Color(0,0,1);
 ViewUtil.SELECTION_COLOR = new THREE.Color(0,1,1);
-ViewUtil.AMPLITUDE = 500.0;
+ViewUtil.ATTRIBUTE_AMPLITUDE = "amplitude";
+ViewUtil.ATTRIBUTE_POSITION  = "position";
+ViewUtil.ATTRIBUTE_SIZE 	 = "size";
+ViewUtil.ATTRIBUTE_COLOR 	 = "customColor";
+ViewUtil.ATTRIBUTE_TEXTURE 	 = "pointTexture";
+ViewUtil.AMPLITUDE = 200.0;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
@@ -251,10 +256,7 @@ ViewUtil.Galaxy = function(systems) {
 	
 	this.systems = systems; // TODO think about copying the array?!
 	
-	//this.systemCoords = new Int16Array(this.systems.length * 3);
-	//this.systemColors = new Int8Array(this.systems.length * 3);
-	//this.systemSizes  = new Int8Array(this.systems.length);
-	this.systemCoords = new Int16Array(this.systems.length * 3);
+	this.systemCoords = new Float32Array(this.systems.length * 3);
 	this.systemColors = new Float32Array(this.systems.length * 3);
 	this.systemSizes  = new Float32Array(this.systems.length);
 		
@@ -281,23 +283,18 @@ ViewUtil.Galaxy = function(systems) {
 	}	
 		
 	this.systemGeometry = new THREE.BufferGeometry();	
-	//this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
-	//this.systemGeometry.setAttribute("color",    new THREE.Int8BufferAttribute( this.systemColors, 3) );	
-	this.systemGeometry.setAttribute("position", new THREE.Int16BufferAttribute( this.systemCoords, 3) );		
-	this.systemGeometry.setAttribute("color",    new THREE.Float32BufferAttribute( this.systemColors, 3) );		
-	this.systemGeometry.setAttribute("size",     new THREE.Float32BufferAttribute( this.systemSizes, 1) );	
+	this.systemGeometry.setAttribute(ViewUtil.ATTRIBUTE_POSITION, new THREE.Float32BufferAttribute( this.systemCoords, 3) );		
+	this.systemGeometry.setAttribute(ViewUtil.ATTRIBUTE_COLOR,    new THREE.Float32BufferAttribute( this.systemColors, 3) );		
+	this.systemGeometry.setAttribute(ViewUtil.ATTRIBUTE_SIZE,     new THREE.Float32BufferAttribute( this.systemSizes, 1) );	
 	
-	//this.systemMaterial = new THREE.PointsMaterial( { vertexColors: true } );
 	this.systemMaterial = new THREE.ShaderMaterial( {
 		uniforms: {
+			amplitude: { value: ViewUtil.AMPLITUDE },
 			color: { value: new THREE.Color( 0xffffff ) },
-			//pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) },
-			pointTexture: { value: new THREE.TextureLoader().load( "img/star.png" ) },
+			pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
 		},
-		//vertexShader: ViewUtil.loadShader("vertexshader"),
-		//fragmentShader: ViewUtil.loadShader("fragmentshader"),
-		vertexShader: document.getElementById( 'vertexshader' ).textContent,
-		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+		vertexShader: ViewUtil.loadShader("vertexshader"),
+		fragmentShader: ViewUtil.loadShader("fragmentshader"),
 		blending: THREE.AdditiveBlending,
 		depthTest: false,
 		transparent: true
@@ -428,22 +425,22 @@ ViewUtil.System = function(x, y, z, size, heat) {
 	this.animate = function(time) {
 		if(this.coords.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemGeometry.getAttribute("position").setXYZ(this.index, this.coords.value.x, this.coords.value.y, this.coords.value.z);
-			this.galaxy.systemGeometry.getAttribute("position").needsUpdate = true;
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_POSITION).setXYZ(this.index, this.coords.value.x, this.coords.value.y, this.coords.value.z);
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_POSITION).needsUpdate = true;
 			//this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
 			//this.galaxy.systemGeometry.verticesNeedUpdate = true;
 		}
 		if(this.color.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemGeometry.getAttribute("color").setXYZ(this.index, this.color.value.r, this.color.value.g, this.color.value.b);
-			this.galaxy.systemGeometry.getAttribute("color").needsUpdate = true;
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_COLOR).setXYZ(this.index, this.color.value.r, this.color.value.g, this.color.value.b);
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_COLOR).needsUpdate = true;
 			//this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
 			//this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
 		}
 		if(this.size.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemGeometry.getAttribute("size").setX(this.index, this.size.value);
-			this.galaxy.systemGeometry.getAttribute("size").needsUpdate = true;
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_SIZE).setX(this.index, this.size.value);
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_SIZE).needsUpdate = true;
 			//this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
 			//this.galaxy.systemShader.attributes.size.needsUpdate = true;	
 		}
@@ -535,13 +532,14 @@ ViewUtil.Plane = function() {
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
 	{	
-		return "attribute float size;\
-attribute vec3 customColor;\
+		return "uniform float amplitude;\
+attribute float " + ViewUtil.ATTRIBUTE_SIZE + ";\
+attribute vec3 " + ViewUtil.ATTRIBUTE_COLOR + ";\
 varying vec3 vColor;\
 void main() {\
-	vColor = customColor;\
+	vColor = " + ViewUtil.ATTRIBUTE_COLOR + ";\
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
-	gl_PointSize = size * ( 100.0 / -mvPosition.z );\
+	gl_PointSize = " + ViewUtil.ATTRIBUTE_SIZE + " * ( amplitude / -mvPosition.z );\
 	gl_Position = projectionMatrix * mvPosition;\
 }";
 	}
