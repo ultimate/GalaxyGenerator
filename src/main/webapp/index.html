@@ -27,7 +27,6 @@
 			var galaxies = {};
 			var view;
 			var stats;
-			var raycaster;
 			
 			init = function() {
 				console.log("init");
@@ -65,8 +64,6 @@
 				view = new View(document.getElementById("view"));
 				
 				selectGalaxy();
-
-				raycaster = new THREE.Raycaster();	
 
 				stats = new Stats();
 				document.getElementById("stats").appendChild( stats.domElement );	
