@@ -26,24 +26,12 @@
 		<script type="text/javascript">
 			var galaxies = {};
 			var view;
-		
-			var mouse = { x: 0, y: 0 };	
-			var activeSector = null;		
-						
-			document.addEventListener("DOMContentLoaded", function(){	
-				init();
-				animate();			
-			}, false);	
+			var stats;
+			var raycaster;
 			
-			function onClick( event ) {
-				if(view != null)
-					view.click(event.clientX, event.clientY);
-			};
-			
-			function init() {
+			init = function() {
 				console.log("init");
-			
-				// init UI
+				
 				// add galaxies to select
 				var select = document.getElementById("select_galaxy");
 				for(var key in galaxies)
@@ -55,8 +43,24 @@
 					option.appendChild(text);
 					select.appendChild(option);
 				}
-				// add color & texture choices				
-				showOptions();
+
+				// add color choices	
+				var cmDiv = document.getElementById("colormodels");
+				for(cm in ViewUtil.ColorModel)
+				{	
+					if(typeof ViewUtil.ColorModel[cm] != "object")
+						continue;
+					ViewUtil.ColorModel.createRadioButton(cm, cmDiv, updateOptions);
+				}
+
+				// add texture choices	
+				var tmDiv = document.getElementById("texturemodels");
+				for(tm in ViewUtil.TextureModel)
+				{	
+					if(typeof ViewUtil.TextureModel[tm] != "object")
+						continue;
+					ViewUtil.TextureModel.createRadioButton(tm, tmDiv, updateOptions);
+				}
 				
 				view = new View(document.getElementById("view"));
 				
@@ -68,13 +72,57 @@
 				document.getElementById("stats").appendChild( stats.domElement );	
 			};	
 			
-			var selectionScreenSize;
-			
-			function animate() {				
+			animate = function() {				
 				requestAnimationFrame( animate );
 				stats.update();	
 				view.render();
-			}	
+			};
+			
+			onClick = function( event ) {
+				if(view != null)
+					view.click(event.clientX, event.clientY);
+			};
+			
+			selectGalaxy = function()
+			{
+				var selection = document.getElementById("select_galaxy").value;
+				console.log("loading galaxy: " + selection + " (stars: " + galaxies[selection].length + ")");
+				view.load(galaxies[selection], 1);
+				updateOptions();
+			};
+						
+			updateOptions = function()
+			{
+				view.updateOptions({
+					rotate: new Number(checkedRadioButton("rotation")),
+					planesXY: document.getElementById("planesXY").checked,
+					planesXZ: document.getElementById("planesXZ").checked,
+					planesYZ: document.getElementById("planesYZ").checked,
+					cube: document.getElementById("cube").checked,
+					colormodel: ViewUtil.ColorModel[checkedRadioButton("colormodel")],
+					texturemodel: ViewUtil.TextureModel[checkedRadioButton("texturemodel")],
+					texturesize: new Number(document.getElementById("texturesize").value),
+				});				
+			};
+			
+			checkedRadioButton = function(sGroupName)
+			{   
+				var group = document.getElementsByName(sGroupName);
+
+				for ( var i = 0; i < group.length; i++) {
+					if (group.item(i).checked) {
+						return group.item(i).value;
+					} else if (group[0].type !== 'radio') {
+						//if you find any in the group not a radio button return null
+						return null;
+					}
+				}
+			};
+		
+			document.addEventListener("DOMContentLoaded", function(){	
+				init();
+				animate();			
+			}, false);	
 			
 			/*
 			var galaxy;
@@ -170,82 +218,6 @@
 				}
 			}
 			*/
-			
-			selectGalaxy = function()
-			{
-				sectors = null;
-				var selection = document.getElementById("select_galaxy").value;
-				console.log("loading galaxy: " + selection + " (stars: " + galaxies[selection].length + ")");
-				sectors = galaxies[selection];
-				/*
-				var iframe = document.getElementById(document.getElementById("select_galaxy").value);
-				console.log("loading galaxy: " + iframe.src);
-				if(iframe.contentWindow.document.body != null)
-					doSelectGalaxy();
-				else
-					iframe.onload = doSelectGalaxy;				
-			};
-			
-			doSelectGalaxy = function()
-			{
-				var script = document.getElementById(document.getElementById("select_galaxy").value);
-				var str = script.contentWindow.document.body.innerHTML;
-				str = str.substring(5,str.length-6);
-				//alert(str);
-				console.log("parsing sectors...");
-				window.eval(str);
-				console.log("sectors parsed: " + (sectors == null ? "null" : sectors.length));
-				*/
-				view.load(sectors,1);
-				updateOptions();
-			};
-						
-			showOptions = function()
-			{
-				var cmDiv = document.getElementById("colormodels");
-				for(cm in ViewUtil.ColorModel)
-				{	
-					if(typeof ViewUtil.ColorModel[cm] != "object")
-						continue;
-					ViewUtil.ColorModel.createRadioButton(cm, cmDiv, updateOptions);
-				}
-				
-				var tmDiv = document.getElementById("texturemodels");
-				for(tm in ViewUtil.TextureModel)
-				{	
-					if(typeof ViewUtil.TextureModel[tm] != "object")
-						continue;
-					ViewUtil.TextureModel.createRadioButton(tm, tmDiv, updateOptions);
-				}
-			};	
-			
-			updateOptions = function()
-			{
-				view.updateOptions({
-					rotate: new Number(checkedRadioButton("rotation")),
-					planesXY: document.getElementById("planesXY").checked,
-					planesXZ: document.getElementById("planesXZ").checked,
-					planesYZ: document.getElementById("planesYZ").checked,
-					cube: document.getElementById("cube").checked,
-					colormodel: ViewUtil.ColorModel[checkedRadioButton("colormodel")],
-					texturemodel: ViewUtil.TextureModel[checkedRadioButton("texturemodel")],
-					texturesize: new Number(document.getElementById("texturesize").value),
-				});				
-			};
-			
-			checkedRadioButton = function(sGroupName)
-			{   
-				var group = document.getElementsByName(sGroupName);
-
-				for ( var i = 0; i < group.length; i++) {
-					if (group.item(i).checked) {
-						return group.item(i).value;
-					} else if (group[0].type !== 'radio') {
-						//if you find any in the group not a radio button return null
-						return null;
-					}
-				}
-			};
 		</script>
 
 		<style type="text/css">
