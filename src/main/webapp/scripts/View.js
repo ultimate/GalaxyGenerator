@@ -245,6 +245,17 @@ var View = function(container) {
 		return sec;
 	};
 	
+	this.click = function(x, y) {
+		console.log("click @ " + x + "|" + y);
+		this.deselect(0);					
+		var activeSector = view.findSectorAt(x, y);					
+		if(activeSector == null)
+			this.camera.target.target = new THREE.Vector3(0,0,0);
+		else
+			this.camera.target.target = activeSector.coords.value;
+		this.select(activeSector);
+	};
+	
 	this.getScreenSize = function(vector, size) { //system) {
 		var p1 = vector; //system.coords.value;
 		//var size = system.size.value;

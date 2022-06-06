@@ -36,18 +36,9 @@
 			}, false);	
 			
 			function onClick( event ) {
-				// TODO move to view.js
-				//event.preventDefault();
-				console.log("click @ " + event.clientX + "|" + event.clientY);
-				view.deselect(0);					
-				activeSector = view.findSectorAt(event.clientX, event.clientY);					
-				if(activeSector == null)
-					view.camera.target.target = new THREE.Vector3(0,0,0);
-				else
-					view.camera.target.target = activeSector.coords.value;
-				view.select(activeSector);
+				if(view != null)
+					view.click(event.clientX, event.clientY);
 			};
-		
 			
 			function init() {
 				console.log("init");
