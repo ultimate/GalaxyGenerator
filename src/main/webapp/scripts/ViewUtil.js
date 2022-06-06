@@ -233,44 +233,19 @@ ViewUtil.GalaxyInfo = function() {
 	this.reset();
 };
 
-ViewUtil.Shader = function(canvas) {
-	/*
-	this.attributes = {
-		size: {	type: 'f', value: [] },
-		customColor: { type: 'c', value: [] }
-	};
-	
-	this.uniforms = {
-		amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
-		color:     { type: "c", value: ViewUtil.WHITE },
-		//texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
-		texture:   { type: "t", value: new THREE.TextureLoader().load( imgPath ) },
-	};
-	
-	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
-	this.fragmentShader = ViewUtil.loadShader( "fragmentshader" );
-				
-	// TODO use
-	// https://threejs.org/docs/#api/en/materials/PointsMaterial
-	// or recheck / recreate
-	// https://threejs.org/docs/?q=shaderm#api/en/materials/ShaderMaterial	
-		
-	this.material = new THREE.ShaderMaterial( {
-		uniforms: 		this.uniforms,
-		//attributes:     this.attributes, // TODO changed as of r72
-		vertexShader:   this.vertexShader,
-		fragmentShader: this.fragmentShader,
-		blending: 		THREE.AdditiveBlending,
-		depthTest: 		false,
-		transparent:	true,
-	});
-	
-	// TODO works with PointsMaterial - now make ShaderMaterial work again
-	// https://stackoverflow.com/questions/66225871/how-to-give-each-point-its-own-color-in-threejs
-	
-	this.material = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
-	
-	*/
+ViewUtil.ShaderMaterial = function(canvas) {
+	return new THREE.ShaderMaterial( {
+		uniforms: {
+			pointSize: { value: 100 },
+			color: { value: new THREE.Color( 0xffffff ) },
+			pointTexture: { value: new THREE.CanvasTexture(canvas) }
+		},
+		vertexShader: ViewUtil.VERTEX_SHADER,
+		fragmentShader: ViewUtil.FRAGMENT_SHADER,
+		blending: THREE.AdditiveBlending,
+		depthTest: false,
+		transparent: true
+	} );
 };
 
 ViewUtil.Galaxy = function(systems) {
@@ -310,18 +285,7 @@ ViewUtil.Galaxy = function(systems) {
 	this.systemGeometry.setAttribute(ViewUtil.ATTRIBUTE_COLOR,    new THREE.Float32BufferAttribute( this.systemColors, 3) );		
 	this.systemGeometry.setAttribute(ViewUtil.ATTRIBUTE_SIZE,     new THREE.Float32BufferAttribute( this.systemSizes, 1) );	
 	
-	this.systemMaterial = new THREE.ShaderMaterial( {
-		uniforms: {
-			pointSize: { value: 100 },
-			color: { value: new THREE.Color( 0xffffff ) },
-			pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
-		},
-		vertexShader: ViewUtil.VERTEX_SHADER,
-		fragmentShader: ViewUtil.FRAGMENT_SHADER,
-		blending: THREE.AdditiveBlending,
-		depthTest: false,
-		transparent: true
-	} );	
+	this.systemMaterial = new ViewUtil.ShaderMaterial(document.getElementById("texture_softdot"));
 	
 	this.systemParticles = new THREE.Points(this.systemGeometry, this.systemMaterial);
 	this.systemParticles.name = "galaxy.systemParticles";
