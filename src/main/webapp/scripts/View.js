@@ -20,12 +20,6 @@ var View = function(container) {
 	this.canvas = document.createElement("canvas");
 	this.container.appendChild(this.canvas);
 	
-	this.materials = {
-		planeT: new THREE.MeshBasicMaterial( { opacity:0.2 , wireframe: false, transparent:	true, side: THREE.DoubleSide } ),
-		planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
-		invisible: new THREE.MeshBasicMaterial( { visible: false} ),
-	};	
-
 	this.camera = {
 		target: new ViewUtil.AnimatedVector3(new THREE.Vector3(0,0,0), 500),
 		radius: new ViewUtil.AnimatedVariable(2000, 100, 2500, 2500),
@@ -320,13 +314,8 @@ var View = function(container) {
 		console.log("XY: " + this.galaxy.info.boundX*2 + " x " + this.galaxy.info.boundY*2);
 		if(this.planes.xy == null)
 		{			
-			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundY*2);					
-			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundY*2, divisions, divisions);					
-			material = this.materials.planeT.clone();
-			material.color = new THREE.Color(0x00ff99);		
-			this.planes.xy = new THREE.Mesh(geometry, material);
+			this.planes.xy = new ViewUtil.Plane(this.galaxy.info.boundX, this.galaxy.info.boundY, new THREE.Color(0x00ff99));
 			this.planes.xy.name = "planes.xy";			
-			//this.planes.xy.position.z = this.galaxy.info.boundZ/count * 2 * (i+0.5) - this.galaxy.info.boundZ;
 			this.planes.xy.rotation.z = Math.PI / 2;			
 			this.scene.add(this.planes.xy);
 		}
@@ -334,13 +323,8 @@ var View = function(container) {
 		console.log("XZ: " + this.galaxy.info.boundX*2 + " x " + this.galaxy.info.boundZ*2);				
 		if(this.planes.xz == null)
 		{
-			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundZ*2);				
-			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundX*2, this.galaxy.info.boundZ*2, divisions, divisions);				
-			material = this.materials.planeT.clone();
-			material.color = new THREE.Color(0x9900ff);
-			this.planes.xz = new THREE.Mesh(geometry, material);
+			this.planes.xz = new ViewUtil.Plane(this.galaxy.info.boundX, this.galaxy.info.boundZ, new THREE.Color(0x9900ff));
 			this.planes.xz.name = "planes.xz";
-			//this.planes.xz.position.y = this.galaxy.info.boundY/count * 2 * (i+0.5) - this.galaxy.info.boundY;
 			this.planes.xz.rotation.x = Math.PI / 2;
 			this.scene.add(this.planes.xz);
 		}
@@ -348,13 +332,8 @@ var View = function(container) {
 		console.log("YZ: " + this.galaxy.info.boundY*2 + " x " + this.galaxy.info.boundZ*2);		
 		if(this.planes.yz == null)
 		{			
-			geometry = new THREE.PlaneGeometry(this.galaxy.info.boundZ*2, this.galaxy.info.boundY*2);
-			//geometry = new THREE.PlaneBufferGeometry(this.galaxy.info.boundZ*2, this.galaxy.info.boundY*2, divisions, divisions);				
-			material = this.materials.planeT.clone();
-			material.color = new THREE.Color(0xff9900);
-			this.planes.yz = new THREE.Mesh(geometry, material);
+			this.planes.yz = new ViewUtil.Plane(this.galaxy.info.boundZ, this.galaxy.info.boundY, new THREE.Color(0xff9900));
 			this.planes.yz.name = "planes.yz";
-			//this.planes.yz.position.x = this.galaxy.info.boundX/count * 2 * (i+0.5) - this.galaxy.info.boundX;
 			this.planes.yz.rotation.y = Math.PI / 2;
 			this.scene.add(this.planes.yz);
 		}		

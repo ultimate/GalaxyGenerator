@@ -30,6 +30,7 @@ ViewUtil.ATTRIBUTE_SIZE 	 = "size";
 ViewUtil.ATTRIBUTE_COLOR 	 = "customColor";
 ViewUtil.UNIFORM_SIZE   	 = "pointSize";
 ViewUtil.UNIFORM_TEXTURE 	 = "pointTexture";
+ViewUtil.GRID_SIZE = 100;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
@@ -57,6 +58,10 @@ ViewUtil.FRAGMENT_SHADER = "\
 		gl_FragColor = gl_FragColor * texture2D( " + ViewUtil.UNIFORM_TEXTURE + ", gl_PointCoord );\
 	}\
 ";
+
+ViewUtil.PLANE_MATERIAL = new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true, transparent: true, side: THREE.DoubleSide } );
+		//planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
+ViewUtil.INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial( { visible: false} );
 	
 ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
 	this.value = initialValue;
@@ -229,7 +234,7 @@ ViewUtil.GalaxyInfo = function() {
 };
 
 ViewUtil.Shader = function(canvas) {
-
+	/*
 	this.attributes = {
 		size: {	type: 'f', value: [] },
 		customColor: { type: 'c', value: [] }
@@ -264,6 +269,8 @@ ViewUtil.Shader = function(canvas) {
 	// https://stackoverflow.com/questions/66225871/how-to-give-each-point-its-own-color-in-threejs
 	
 	this.material = new THREE.PointsMaterial( { size: 1, vertexColors: true } );	
+	
+	*/
 };
 
 ViewUtil.Galaxy = function(systems) {
@@ -467,6 +474,19 @@ ViewUtil.System = function(x, y, z, size, heat) {
 	};
 };
 
+ViewUtil.roundToGrid = function(value)
+{
+	return Math.ceil(value / ViewUtil.GRID_SIZE) * ViewUtil.GRID_SIZE;
+};
+
+ViewUtil.Plane = function(w, h, color)
+{
+	var	geometry = new THREE.PlaneGeometry(ViewUtil.roundToGrid(w*2), ViewUtil.roundToGrid(h*2), ViewUtil.roundToGrid(w*2)/ViewUtil.GRID_SIZE, ViewUtil.roundToGrid(h*2)/ViewUtil.GRID_SIZE);	
+	var material = ViewUtil.PLANE_MATERIAL.clone();				
+	material.color = color;		
+	return new THREE.Mesh(geometry, material);
+};
+
 ViewUtil.EventManager = function(view)
 {
 	this.view = view;
@@ -478,7 +498,7 @@ ViewUtil.EventManager = function(view)
 	this.cameraTimeout = null;
 		
 	this.handleDragStart = function(event) {
-		console.log(event);
+		//console.log(event);
 		this.lastX = event.pageX;
 		this.lastY = event.pageY;
 		this.inDragMode = true;
@@ -492,7 +512,7 @@ ViewUtil.EventManager = function(view)
 	};
 		
 	this.handleDragStop = function(event) {
-		console.log(event);
+		//console.log(event);
 		this.inDragMode = false;
 		if(this.dragEventCount < 5)
 			//this.handleClick(event);
@@ -522,7 +542,7 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleScroll = function(event) {	
-		console.log(event);			
+		//console.log(event);			
 		var event = window.event || event;
 		event.preventDefault();
 		
@@ -534,7 +554,7 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleClick = function(event) {
-		console.log(event);
+		//console.log(event);
 		this.view.click(event.clientX, event.clientY);
 	};
 	
