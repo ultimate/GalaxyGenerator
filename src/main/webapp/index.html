@@ -94,7 +94,8 @@
 					colormodel: ViewUtil.ColorModel[checkedRadioButton("colormodel")],
 					texturemodel: ViewUtil.TextureModel[checkedRadioButton("texturemodel")],
 					texturesize: new Number(document.getElementById("texturesize").value),
-				});				
+				});	
+				document.getElementById("texturesize_value").innerHTML = document.getElementById("texturesize").value;
 			};
 			
 			checkedRadioButton = function(sGroupName)

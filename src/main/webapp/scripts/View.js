@@ -247,7 +247,7 @@ var View = function(container) {
 			this.camera.target.target = new THREE.Vector3(0,0,0);
 		else
 			this.camera.target.target = activeSector.coords.value;
-		this.select(activeSector);
+		this.select(activeSector, 0);
 	};
 	
 	this.getScreenSize = function(vector, size) { //system) {
@@ -279,8 +279,8 @@ var View = function(container) {
 			// remove the old particle system(s)
 			if(this.galaxy.systemParticles != null)
 				this.scene.remove(this.galaxy.systemParticles);
-			if(this.galaxy.selectionParticles != null)
-				this.scene.remove(this.galaxy.selectionParticles);
+			if(this.galaxy.selectionMarker != null)
+				this.scene.remove(this.galaxy.selectionMarker);
 				
 			delete this.galaxy;
 		}
@@ -341,8 +341,10 @@ var View = function(container) {
 		// add the new particle system
 		console.log("adding galaxy...");
 		this.scene.add(this.galaxy.systemParticles);
-		this.scene.add(this.galaxy.selectionParticles);			
-		
+		for(var i = 0; i < this.galaxy.selectionMarkers.length; i++)
+		{
+			this.scene.add(this.galaxy.selectionMarkers[i]);
+		}			
 	};
 	
 	this.lastAnimation = new Date().getTime();
@@ -359,9 +361,7 @@ var View = function(container) {
 		this.camera.update();
 		this.renderer.render( this.scene, this.camera.camera );
 	};
-	
-	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
-		
+			
 	this.select = function(system, selectionIndex) {
 		return this.galaxy.select(system, selectionIndex);
 	};

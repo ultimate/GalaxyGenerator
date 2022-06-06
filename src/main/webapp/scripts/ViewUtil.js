@@ -34,7 +34,10 @@ ViewUtil.GRID_SIZE = 100;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
-ViewUtil.SELECTIONS_MAX = 2;
+ViewUtil.SELECTIONS_MAX = 1;
+ViewUtil.SELECTION_SIZE = 10;
+ViewUtil.SELECTION_WIDTH_SEGMENTS = 16;
+ViewUtil.SELECTION_HEIGHT_SEGMENTS = 8;
 ViewUtil.ROTATION_TIMEOUT = 3000;
 
 ViewUtil.VERTEX_SHADER = "\
@@ -59,7 +62,7 @@ ViewUtil.FRAGMENT_SHADER = "\
 	}\
 ";
 
-ViewUtil.PLANE_MATERIAL = new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true, transparent: true, side: THREE.DoubleSide } );
+ViewUtil.WIREFRAME_MATERIAL = new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true, transparent: true, side: THREE.DoubleSide } );
 		//planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
 ViewUtil.INVISIBLE_MATERIAL = new THREE.MeshBasicMaterial( { visible: false} );
 	
@@ -260,7 +263,7 @@ ViewUtil.Galaxy = function(systems) {
 		
 	let defaultCoord = ViewUtil.INFINITY.clone();
 	let defaultColor = ViewUtil.WHITE.clone();
-	let defaultSize = 10;
+	let defaultSize = ViewUtil.SYSTEM_SIZE_MIN;
 			
 	for(let s = 0; s < this.systems.length; s++)
 	{
@@ -291,53 +294,16 @@ ViewUtil.Galaxy = function(systems) {
 	this.systemParticles.name = "galaxy.systemParticles";
 	this.systemParticles.dynamic = true;
 	
-	// TODO
-	this.selectionParticles = new THREE.Points();
-	
-	/*
-	{ // particles for all systems
-	
-		
-		this.systemShader = new ViewUtil.GalaxyShader("img/star.png");
-		
-		this.systemGeometry = new THREE.Geometry();
-		this.systemGeometry.vertices = new Array(this.systems.length); // can't change the amount later!!!
-		for(var v = 0; v < this.systemGeometry.vertices.length; v++)
-		{
-			this.systemGeometry.vertices[v] = ViewUtil.INFINITY.clone();
-			this.systemShader.attributes.size.value[v] = 1;
-			this.systemShader.attributes.customColor.value[v] = ViewUtil.WHITE.clone();
-		}
-		this.systemGeometry.dynamic = true;
-		
-		//this.systemParticles = new THREE.ParticleSystem(this.systemGeometry, this.systemShader.material);
-		this.systemParticles = new THREE.Points(this.systemGeometry, this.systemShader.material);
-		this.systemParticles.name = "galaxy.systemParticles";
-		this.systemParticles.dynamic = true;
-	}
-	
-	{ // particles for selected system(s)
-		this.selectionShader = new ViewUtil.GalaxyShader("img/circle.png");
-		this.selectionShader.material.blending = THREE.NormalBlending; // marker must always be in front of view
-		
-		this.selectionGeometry = new THREE.Geometry({name: "galaxy.selectionGeometry"});
-		this.selectionGeometry.vertices = new Array(ViewUtil.SELECTIONS_MAX); // can't change the amount later!!!
-		for(var v = 0; v < this.selectionGeometry.vertices.length; v++)
-		{
-			this.selectionGeometry.vertices[v] = ViewUtil.INFINITY.clone();
-			this.selectionShader.attributes.size.value[v] = 0;
-			this.selectionShader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
-		}
-		this.selectionGeometry.dynamic = true;
-		
-		//this.selectionParticles = new THREE.ParticleSystem(this.selectionGeometry, this.selectionShader.material);
-		this.selectionParticles = new THREE.Points(this.selectionGeometry, this.selectionShader.material);
-		this.selectionParticles.name = "galaxy.selectionParticles";
-		this.selectionParticles.dynamic = true;
-	}
-		*/
-	
 	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
+	this.selectionMarkers = [];
+	
+	for(var i = 0; i < ViewUtil.SELECTIONS_MAX; i++)
+	{
+		this.selectionMarkers[i] = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(ViewUtil.SELECTION_SIZE, ViewUtil.SELECTION_WIDTH_SEGMENTS, ViewUtil.SELECTION_HEIGHT_SEGMENTS)), ViewUtil.WIREFRAME_MATERIAL.clone());
+		this.selectionMarkers[i].geometry.rotateX(Math.PI/2);
+		this.selectionMarkers[i].material.color = new THREE.Color(0,1,1);
+		this.selectionMarkers[i].material.visible = false;
+	}
 		
 	this.select = function(system, selectionIndex) {
 		if(selectionIndex == null)
@@ -346,7 +312,15 @@ ViewUtil.Galaxy = function(systems) {
 		if(selectionIndex > this.selections.length)
 			throw new Error("index exceeding max selections");
 			
-		this.selections[selectionIndex] = system;		
+		this.selections[selectionIndex] = system;	
+		this.selectionMarkers[selectionIndex].material.visible = (system != null);	
+		if(system != null)
+		{
+			console.log(system.coords.value);
+			this.selectionMarkers[selectionIndex].position.x = system.coords.value.x ;
+			this.selectionMarkers[selectionIndex].position.y = system.coords.value.y ;
+			this.selectionMarkers[selectionIndex].position.z = system.coords.value.z ;
+		}
 		return selectionIndex;
 	};
 	
@@ -414,22 +388,16 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		{
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_POSITION).setXYZ(this.index, this.coords.value.x, this.coords.value.y, this.coords.value.z);
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_POSITION).needsUpdate = true;
-			//this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
-			//this.galaxy.systemGeometry.verticesNeedUpdate = true;
 		}
 		if(this.color.animate(time) || this.firstAnimation)
 		{
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_COLOR).setXYZ(this.index, this.color.value.r, this.color.value.g, this.color.value.b);
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_COLOR).needsUpdate = true;
-			//this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
-			//this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
 		}
 		if(this.size.animate(time) || this.firstAnimation)
 		{
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_SIZE).setX(this.index, this.size.value);
 			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_SIZE).needsUpdate = true;
-			//this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
-			//this.galaxy.systemShader.attributes.size.needsUpdate = true;	
 		}
 		
 		this.heat.animate(time);
@@ -446,7 +414,7 @@ ViewUtil.roundToGrid = function(value)
 ViewUtil.Plane = function(w, h, color)
 {
 	var	geometry = new THREE.PlaneGeometry(ViewUtil.roundToGrid(w*2), ViewUtil.roundToGrid(h*2), ViewUtil.roundToGrid(w*2)/ViewUtil.GRID_SIZE, ViewUtil.roundToGrid(h*2)/ViewUtil.GRID_SIZE);	
-	var material = ViewUtil.PLANE_MATERIAL.clone();				
+	var material = ViewUtil.WIREFRAME_MATERIAL.clone();				
 	material.color = color;		
 	return new THREE.Mesh(geometry, material);
 };
