@@ -35,12 +35,29 @@ ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
 ViewUtil.SELECTIONS_MAX = 2;
 ViewUtil.ROTATION_TIMEOUT = 3000;
-	
-ViewUtil.loadShader = function(name) {
-	var index = DependencyManager.indexOf(name);
-	return DependencyManager.scriptContents[index];
-};
 
+ViewUtil.VERTEX_SHADER = "\
+	uniform float " + ViewUtil.UNIFORM_SIZE + ";\
+	attribute float " + ViewUtil.ATTRIBUTE_SIZE + ";\
+	attribute vec3 " + ViewUtil.ATTRIBUTE_COLOR + ";\
+	varying vec3 vColor;\
+	void main() {\
+		vColor = " + ViewUtil.ATTRIBUTE_COLOR + ";\
+		vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
+		gl_PointSize = " + ViewUtil.ATTRIBUTE_SIZE + " * ( " + ViewUtil.UNIFORM_SIZE + " / -mvPosition.z );\
+		gl_Position = projectionMatrix * mvPosition;\
+	}\
+";
+ViewUtil.FRAGMENT_SHADER = "\
+	uniform vec3 color;\
+	uniform sampler2D " + ViewUtil.UNIFORM_TEXTURE + ";\
+	varying vec3 vColor;\
+	void main() {\
+		gl_FragColor = vec4( color * vColor, 1.0 );\
+		gl_FragColor = gl_FragColor * texture2D( " + ViewUtil.UNIFORM_TEXTURE + ", gl_PointCoord );\
+	}\
+";
+	
 ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
 	this.value = initialValue;
 	this.target = initialValue;
@@ -211,7 +228,7 @@ ViewUtil.GalaxyInfo = function() {
 	this.reset();
 };
 
-ViewUtil.GalaxyShader = function(imgPath) {
+ViewUtil.Shader = function(canvas) {
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -292,8 +309,8 @@ ViewUtil.Galaxy = function(systems) {
 			color: { value: new THREE.Color( 0xffffff ) },
 			pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
 		},
-		vertexShader: ViewUtil.loadShader("vertexshader"),
-		fragmentShader: ViewUtil.loadShader("fragmentshader"),
+		vertexShader: ViewUtil.VERTEX_SHADER,
+		fragmentShader: ViewUtil.FRAGMENT_SHADER,
 		blending: THREE.AdditiveBlending,
 		depthTest: false,
 		transparent: true
@@ -477,7 +494,7 @@ ViewUtil.EventManager = function(view)
 		this.inDragMode = false;
 		if(this.dragEventCount < 5)
 			//this.handleClick(event);
-			onClick(event);
+			this.handleClick(event);
 		this.cameraTimeout = setTimeout(function(rotation) { return function() {
 			this.view.camera.rotate(rotation);
 		}; }(this.cameraRotationBeforeDrag), ViewUtil.ROTATION_TIMEOUT);
@@ -514,7 +531,7 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleClick = function(event) {
-		// TODO
+		this.view.click(event.clientX, event.clientY);
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
@@ -522,35 +539,3 @@ ViewUtil.EventManager = function(view)
 	Events.addEventListener("mouseup", Events.wrapEventHandler(this, this.handleDragStop), this.view.canvas);
 	Events.addEventListener("DOMMouseScroll", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
 };
-
-ViewUtil.Plane = function() {
-	
-};
-
-// for debugging without Request.js - START
-ViewUtil.loadShader = function(name) {
-	if(name == "vertexshader")
-	{	
-		return "uniform float pointSize;\
-attribute float " + ViewUtil.ATTRIBUTE_SIZE + ";\
-attribute vec3 " + ViewUtil.ATTRIBUTE_COLOR + ";\
-varying vec3 vColor;\
-void main() {\
-	vColor = " + ViewUtil.ATTRIBUTE_COLOR + ";\
-	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
-	gl_PointSize = " + ViewUtil.ATTRIBUTE_SIZE + " * ( pointSize / -mvPosition.z );\
-	gl_Position = projectionMatrix * mvPosition;\
-}";
-	}
-	else if(name == "fragmentshader")
-	{
-		return "uniform vec3 color;\
-uniform sampler2D pointTexture;\
-varying vec3 vColor;\
-void main() {\
-	gl_FragColor = vec4( color * vColor, 1.0 );\
-	gl_FragColor = gl_FragColor * texture2D( pointTexture, gl_PointCoord );\
-}";
-	}
-};
-// for debugging without Request.js - END
