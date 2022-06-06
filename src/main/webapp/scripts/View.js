@@ -268,6 +268,101 @@ var View = function(container) {
 			console.log("removing previous galaxy...");
 			// TODO animate?!
 			
+			/*
+			var galaxy;
+			
+			updateStars = function(firstCall)
+			{
+				console.log("update stars");
+				var factor = 0.6;				
+				var diffTreshold;
+				if(galaxy.animation == -1)
+					diffTreshold = 10;
+				else
+					diffTreshold = 1;
+				
+				var inMotion = 0;
+				var diff;
+				var target;
+				for(i = 0; i < galaxy.particles.vertices.length; i++)
+				{
+					if(galaxy.animation == -1)
+						target = new THREE.Vector3(0,0,0);
+					else
+						target = galaxy.particles.vertices[i].target;
+						
+					// x
+					diff = Math.abs(target.x - galaxy.particles.vertices[i].x);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].x = target.x;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].x = target.x - (target.x - galaxy.particles.vertices[i].x)*factor;
+						inMotion++;
+					}
+					// y
+					diff = Math.abs(target.y - galaxy.particles.vertices[i].y);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].y = target.y;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].y = target.y - (target.y - galaxy.particles.vertices[i].y)*factor;
+						inMotion++;
+					}
+					// z
+					diff = Math.abs(target.z - galaxy.particles.vertices[i].z);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].z = target.z;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].z = target.z - (target.z - galaxy.particles.vertices[i].z)*factor;
+						inMotion++;
+					}
+				}
+				
+				if((inMotion == 0 && galaxy.animation == -1) || (galaxy.animation == 1 && firstCall == true))			
+				{				
+					console.log("animation -1 done!");
+					galaxy.animation = 1;		
+					inMotion = 1;
+					
+					var colormodel = colormodels[checkedRadioButton("colormodel")];
+					for(i = 0; i < galaxy.particles.vertices.length; i++)
+					{
+						target = galaxy.particles.vertices[i].target;
+						if(target.x == 0 && target.y == 0 && target.z == 0)
+						{
+							galaxy.sizes[i] = 0;
+							
+							galaxy.colors[i].radius = 0;
+							galaxy.colors[i].radius2 = 0;
+						}
+						else
+						{
+							galaxy.colors[i].radius = galaxy.colors[i].radius_tmp;
+							galaxy.colors[i].radius2 = galaxy.colors[i].radius2_tmp;
+							galaxy.colors[i].calculateRGB(colormodel);
+						}
+					}					
+					view.shaders.attributes.size.needsUpdate = true;	
+					view.shaders.attributes.customColor.needsUpdate = true;	
+				}
+				
+				//console.log("stars updated: " + inMotion);
+				if(inMotion > 0)
+				{
+					galaxy.particleSystem.geometry.verticesNeedUpdate = true;
+					setTimeout(updateStars, 100);
+				}
+			}
+			*/
+			
 			// remove old planes
 			if(this.planes.xy != null)
 				this.scene.remove(this.planes.xy.mesh);
