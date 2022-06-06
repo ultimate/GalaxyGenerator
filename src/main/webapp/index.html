@@ -71,7 +71,6 @@
 				
 				selectGalaxy();
 
-				//projector = new THREE.Projector(); // TODO changed as of r84 or so
 				raycaster = new THREE.Raycaster();	
 
 				stats = new Stats();
@@ -86,10 +85,7 @@
 				view.render();
 			}	
 			
-			/******************
-			 * new
-			******************/
-			
+			/*
 			var galaxy;
 			
 			updateStars = function(firstCall)
@@ -182,6 +178,7 @@
 					setTimeout(updateStars, 100);
 				}
 			}
+			*/
 			
 			selectGalaxy = function()
 			{
@@ -211,23 +208,6 @@
 				view.load(sectors,1);
 				updateOptions();
 			};
-			
-			updateOptions = function()
-			{
-				// rotation
-				view.updateOptions({
-					rotate: new Number(checkedRadioButton("rotation")),
-					planesXY: document.getElementById("planesXY").checked,
-					planesXZ: document.getElementById("planesXZ").checked,
-					planesYZ: document.getElementById("planesYZ").checked,
-					cube: document.getElementById("cube").checked,
-					colormodel: ViewUtil.ColorModel[checkedRadioButton("colormodel")],
-					texturemodel: ViewUtil.TextureModel[checkedRadioButton("texturemodel")],
-					texturesize: new Number(document.getElementById("texturesize").value),
-				});				
-			};
-						
-			var debugRGB = false;
 						
 			showOptions = function()
 			{
@@ -247,6 +227,20 @@
 					ViewUtil.TextureModel.createRadioButton(tm, tmDiv, updateOptions);
 				}
 			};	
+			
+			updateOptions = function()
+			{
+				view.updateOptions({
+					rotate: new Number(checkedRadioButton("rotation")),
+					planesXY: document.getElementById("planesXY").checked,
+					planesXZ: document.getElementById("planesXZ").checked,
+					planesYZ: document.getElementById("planesYZ").checked,
+					cube: document.getElementById("cube").checked,
+					colormodel: ViewUtil.ColorModel[checkedRadioButton("colormodel")],
+					texturemodel: ViewUtil.TextureModel[checkedRadioButton("texturemodel")],
+					texturesize: new Number(document.getElementById("texturesize").value),
+				});				
+			};
 			
 			checkedRadioButton = function(sGroupName)
 			{   
