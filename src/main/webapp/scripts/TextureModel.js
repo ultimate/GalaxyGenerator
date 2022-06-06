@@ -17,18 +17,18 @@ TextureModel = {
 			this.first = false;
 		}
 		div.appendChild(radio);
-		var canvas = document.createElement("canvas");
-		canvas.setAttribute("width", this.size);
-		canvas.setAttribute("height", this.size);
-		canvas.id = "texture_" + tm;
-		div.appendChild(canvas);
+		texturemodel.canvas = document.createElement("canvas");
+		texturemodel.canvas.setAttribute("width", this.size);
+		texturemodel.canvas.setAttribute("height", this.size);
+		texturemodel.canvas.id = "texture_" + tm;
+		div.appendChild(texturemodel.canvas);
 		var desc = document.createElement("span");
 		desc.className = "description";
 		desc.innerHTML = "(" + texturemodel.name + ")";
 		div.appendChild(desc);
 		parentElement.appendChild(div);
 		console.log("adding texturemodel: " + texturemodel.name);
-		var ctx = canvas.getContext("2d");
+		var ctx = texturemodel.canvas.getContext("2d");
 		ctx.clearRect(0, 0, this.size, this.size);
 		ctx.translate(this.size/2, this.size/2);
 		texturemodel.draw(ctx, this.size);

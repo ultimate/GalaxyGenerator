@@ -18,17 +18,17 @@ ColorModel = {
 			this.first = false;
 		}
 		div.appendChild(radio);
-		var canvas = document.createElement("canvas");
-		canvas.setAttribute("width", this.width);
-		canvas.setAttribute("height", this.height);
-		div.appendChild(canvas);
+		colormodel.canvas = document.createElement("canvas");
+		colormodel.canvas.setAttribute("width", this.width);
+		colormodel.canvas.setAttribute("height", this.height);
+		div.appendChild(colormodel.canvas);
 		var desc = document.createElement("span");
 		desc.className = "description";
 		desc.innerHTML = "(" + colormodel.name + ")";
 		div.appendChild(desc);
 		parentElement.appendChild(div);
 		console.log("adding colormodel: " + colormodel.name);
-		var ctx = canvas.getContext("2d");
+		var ctx = colormodel.canvas.getContext("2d");
 		ctx.clearRect(0, 0, this.width, this.height);
 		for(let i = 0; i <= this.width; i++)
 		{

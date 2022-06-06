@@ -25,12 +25,11 @@ ViewUtil.RED = new THREE.Color(1,0,0);
 ViewUtil.GREEN = new THREE.Color(0,1,0);
 ViewUtil.BLUE = new THREE.Color(0,0,1);
 ViewUtil.SELECTION_COLOR = new THREE.Color(0,1,1);
-ViewUtil.ATTRIBUTE_AMPLITUDE = "amplitude";
 ViewUtil.ATTRIBUTE_POSITION  = "position";
 ViewUtil.ATTRIBUTE_SIZE 	 = "size";
 ViewUtil.ATTRIBUTE_COLOR 	 = "customColor";
-ViewUtil.ATTRIBUTE_TEXTURE 	 = "pointTexture";
-ViewUtil.AMPLITUDE = 200.0;
+ViewUtil.UNIFORM_SIZE   	 = "pointSize";
+ViewUtil.UNIFORM_TEXTURE 	 = "pointTexture";
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
@@ -289,7 +288,7 @@ ViewUtil.Galaxy = function(systems) {
 	
 	this.systemMaterial = new THREE.ShaderMaterial( {
 		uniforms: {
-			amplitude: { value: ViewUtil.AMPLITUDE },
+			pointSize: { value: 100 },
 			color: { value: new THREE.Color( 0xffffff ) },
 			pointTexture: { value: new THREE.CanvasTexture(document.getElementById("texture_softdot")) }
 		},
@@ -532,14 +531,14 @@ ViewUtil.Plane = function() {
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
 	{	
-		return "uniform float amplitude;\
+		return "uniform float pointSize;\
 attribute float " + ViewUtil.ATTRIBUTE_SIZE + ";\
 attribute vec3 " + ViewUtil.ATTRIBUTE_COLOR + ";\
 varying vec3 vColor;\
 void main() {\
 	vColor = " + ViewUtil.ATTRIBUTE_COLOR + ";\
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
-	gl_PointSize = " + ViewUtil.ATTRIBUTE_SIZE + " * ( amplitude / -mvPosition.z );\
+	gl_PointSize = " + ViewUtil.ATTRIBUTE_SIZE + " * ( pointSize / -mvPosition.z );\
 	gl_Position = projectionMatrix * mvPosition;\
 }";
 	}
