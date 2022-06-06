@@ -7,6 +7,7 @@ ColorModel = {
 		var colormodel = this[cm];
 		var div = document.createElement("div");
 		div.className = "model color";
+		div.style.height = (this.height+2) + "px";
 		var radio = document.createElement("input");
 		radio.type = "radio";
 		radio.value = cm;
@@ -21,6 +22,7 @@ ColorModel = {
 		colormodel.canvas = document.createElement("canvas");
 		colormodel.canvas.setAttribute("width", this.width);
 		colormodel.canvas.setAttribute("height", this.height);
+		colormodel.canvas.style.top = (this.height/2-6) + "px";
 		div.appendChild(colormodel.canvas);
 		var desc = document.createElement("span");
 		desc.className = "description";

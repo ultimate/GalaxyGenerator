@@ -1,11 +1,14 @@
 TextureModel = {
 	first: true,
-	size: 20,
+	size: 50,
 	// display helper
 	createRadioButton: function(tm, parentElement) {
 		var texturemodel = this[tm];
 		var div = document.createElement("div");
 		div.className = "model texture";
+		div.style.height = (this.size+2) + "px";
+   		div.style.position = "relative";
+   		div.style.top = (-this.size/2) + "px";
 		var radio = document.createElement("input");
 		radio.type = "radio";
 		radio.value = tm;
@@ -20,6 +23,7 @@ TextureModel = {
 		texturemodel.canvas = document.createElement("canvas");
 		texturemodel.canvas.setAttribute("width", this.size);
 		texturemodel.canvas.setAttribute("height", this.size);
+		texturemodel.canvas.style.top = (this.size/2-6) + "px";
 		texturemodel.canvas.id = "texture_" + tm;
 		div.appendChild(texturemodel.canvas);
 		var desc = document.createElement("span");
@@ -49,7 +53,7 @@ TextureModel = {
 		name: "sparkle",
 		draw: function(ctx, size) {
 			ctx.fillStyle = "white";
-			var sparkles = [0.8, 0.5, 0.8, 0.5, 0.8, 0.5, 0.8, 0.5];
+			var sparkles = [1.0, 0.7, 1.0, 0.7, 1.0, 0.7, 1.0, 0.7];
 			for(let s in sparkles)
 			{
 				ctx.beginPath();
