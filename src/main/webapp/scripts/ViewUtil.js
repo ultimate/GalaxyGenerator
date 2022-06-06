@@ -478,6 +478,7 @@ ViewUtil.EventManager = function(view)
 	this.cameraTimeout = null;
 		
 	this.handleDragStart = function(event) {
+		console.log(event);
 		this.lastX = event.pageX;
 		this.lastY = event.pageY;
 		this.inDragMode = true;
@@ -491,6 +492,7 @@ ViewUtil.EventManager = function(view)
 	};
 		
 	this.handleDragStop = function(event) {
+		console.log(event);
 		this.inDragMode = false;
 		if(this.dragEventCount < 5)
 			//this.handleClick(event);
@@ -519,7 +521,8 @@ ViewUtil.EventManager = function(view)
 		}
 	};
 	
-	this.handleScroll = function(event) {				
+	this.handleScroll = function(event) {	
+		console.log(event);			
 		var event = window.event || event;
 		event.preventDefault();
 		
@@ -531,11 +534,12 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleClick = function(event) {
+		console.log(event);
 		this.view.click(event.clientX, event.clientY);
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
 	Events.addEventListener("mousemove", Events.wrapEventHandler(this, this.handleDrag), this.view.canvas);
 	Events.addEventListener("mouseup", Events.wrapEventHandler(this, this.handleDragStop), this.view.canvas);
-	Events.addEventListener("DOMMouseScroll", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
+	Events.addEventListener("wheel", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
 };
