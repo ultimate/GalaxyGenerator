@@ -95,6 +95,41 @@ var View = function(container) {
 		console.log("updating view size: " + this.container.offsetWidth + "x" + this.container.offsetHeight + " (aspect: " + this.camera.camera.aspect + ")");
 	};
 	
+	this.updateOptions = function(args) {
+		if(args.rotate != null && this.camera != null)
+			this.camera.rotate(args.rotate);
+		if(args.planesXY != null && this.planes.xy != null)
+			view.planes.xy.material.visible = args.planesXY;
+		if(args.planesXZ != null && this.planes.xz != null)
+			view.planes.xz.material.visible = args.planesXZ;
+		if(args.planesYZ != null && this.planes.yz != null)
+			view.planes.yz.material.visible = args.planesYZ;
+		if(args.cube != null && this.cube != null)
+			view.cube.material.visible = args.cube;
+		if(args.colormodel != null && this.galaxy != null)
+		{
+			console.log("update colormodel: " + args.colormodel.name);
+			for(i = 0; i < this.galaxy.systems.length; i++)
+			{
+				this.galaxy.systems[i].colorModel = args.colormodel;
+				this.galaxy.systems[i].updateColor();
+			}
+			this.galaxy.systemGeometry.getAttribute(ViewUtil.ATTRIBUTE_COLOR).needsUpdate = true;
+		}
+		if(args.texturemodel != null && this.galaxy != null)
+		{
+			console.log("update texturemodel: " + args.texturemodel.name);
+			this.galaxy.systemMaterial.uniforms[ViewUtil.UNIFORM_TEXTURE] = new THREE.Uniform(new THREE.CanvasTexture(args.texturemodel.canvas));
+			this.galaxy.systemMaterial.uniformsNeedUpdate = true;
+		}
+		if(args.texturesize != null && this.galaxy != null)
+		{
+			console.log("update texturesize: " + args.texturesize);
+			this.galaxy.systemMaterial.uniforms[ViewUtil.UNIFORM_SIZE] = new THREE.Uniform(args.texturesize);
+			this.galaxy.systemMaterial.uniformsNeedUpdate = true;
+		}
+	};
+	
 	this.getScreenCoords = function(vector) {
 		var vec = vector.clone();
 		vec.applyMatrix4(this.camera.projection);

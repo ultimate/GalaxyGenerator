@@ -2,7 +2,7 @@ TextureModel = {
 	first: true,
 	size: 50,
 	// display helper
-	createRadioButton: function(tm, parentElement) {
+	createRadioButton: function(tm, parentElement, callback) {
 		var texturemodel = this[tm];
 		var div = document.createElement("div");
 		div.className = "model texture";
@@ -13,7 +13,7 @@ TextureModel = {
 		radio.type = "radio";
 		radio.value = tm;
 		radio.name = "texturemodel";
-		radio.onchange = updateTextures;
+		radio.onchange = callback;
 		if(this.first)
 		{
 			radio.checked = "checked";

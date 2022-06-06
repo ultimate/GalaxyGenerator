@@ -3,7 +3,7 @@ ColorModel = {
 	width: 100,
 	height: 20,
 	// display helper
-	createRadioButton: function(cm, parentElement) {
+	createRadioButton: function(cm, parentElement, callback) {
 		var colormodel = this[cm];
 		var div = document.createElement("div");
 		div.className = "model color";
@@ -12,7 +12,7 @@ ColorModel = {
 		radio.type = "radio";
 		radio.value = cm;
 		radio.name = "colormodel";
-		radio.onchange = updateColors;
+		radio.onchange = callback;
 		if(this.first)
 		{
 			radio.checked = "checked";
