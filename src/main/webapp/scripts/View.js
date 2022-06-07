@@ -93,13 +93,13 @@ var View = function(container) {
 		if(args.rotate != null && this.camera != null)
 			this.camera.rotate(args.rotate);
 		if(args.planesXY != null && this.planes.xy != null)
-			view.planes.xy.material.visible = args.planesXY;
+			this.planes.xy.material.visible = args.planesXY;
 		if(args.planesXZ != null && this.planes.xz != null)
-			view.planes.xz.material.visible = args.planesXZ;
+			this.planes.xz.material.visible = args.planesXZ;
 		if(args.planesYZ != null && this.planes.yz != null)
-			view.planes.yz.material.visible = args.planesYZ;
+			this.planes.yz.material.visible = args.planesYZ;
 		if(args.cube != null && this.cube != null)
-			view.cube.material.visible = args.cube;
+			this.cube.material.visible = args.cube;
 		if(args.colormodel != null && this.galaxy != null)
 		{
 			console.log("update colormodel: " + args.colormodel.name);
@@ -242,7 +242,7 @@ var View = function(container) {
 	this.click = function(x, y) {
 		console.log("click @ " + x + "|" + y);
 		this.deselect(0);					
-		var activeSector = view.findSectorAt(x, y);					
+		var activeSector = this.findSectorAt(x, y);					
 		if(activeSector == null)
 			this.camera.target.target = new THREE.Vector3(0,0,0);
 		else
