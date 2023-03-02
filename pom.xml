@@ -333,7 +333,7 @@
 
 		<!-- Web-Dependencies -->
 		<servlet.version>3.1.1</servlet.version> <!-- 21.02.2020 -->
-		<jackson.version>2.10.5.1</jackson.version> <!-- 21.02.2020 -->
+		<jackson.version>2.12.7.1</jackson.version> <!-- 21.02.2020 -->
     	<jetty.version>10.0.10</jetty.version> <!-- 21.02.2020 -->
 		
 		<!-- Utils-Dependencies -->
